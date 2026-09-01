@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: theme('colors.line.DEFAULT');
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-base text-ink antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+    text-rendering: optimizeLegibility;
+    min-height: 100dvh;
+  }
+
+  /* Tabular figures everywhere a number can change, so values never jitter. */
+  .tabular,
+  input[type='number'],
+  input[inputmode='decimal'] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: theme('colors.accent.DEFAULT');
+    color: #05070a;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.accent.DEFAULT');
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Remove the native spinners; the fields have their own controls. */
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.18);
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  /* The translucent surface used for every raised panel in the product. */
+  .panel {
+    @apply relative rounded-2xl border border-line bg-base-raised/70 backdrop-blur-xl shadow-panel;
+  }
+
+  .panel-flat {
+    @apply rounded-2xl border border-line bg-base-raised/50;
+  }
+
+  /* Small uppercase field/stat labels. */
+  .label {
+    @apply text-2xs font-medium uppercase tracking-label text-ink-faint;
+  }
+
+  .hairline {
+    @apply h-px w-full bg-line;
+  }
+
+  .link-underline {
+    @apply underline decoration-line-strong decoration-1 underline-offset-4 transition-colors hover:decoration-accent hover:text-accent-soft;
+  }
+
+  /* Faint technical grid used behind hero sections. */
+  .grid-field {
+    background-image: theme('backgroundImage.grid');
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 85% 60% at 50% 0%, #000 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 60% at 50% 0%, #000 30%, transparent 78%);
+  }
+
+  .prose-riskline p {
+    @apply text-[0.9375rem] leading-relaxed text-ink-muted;
+  }
+
+  .prose-riskline p + p {
+    @apply mt-3.5;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Numeric display face used for every large figure. */
+  .display-num {
+    @apply font-mono tabular-nums tracking-tight;
+  }
+}
+
+/*
+  Reduced motion: keep every state change legible, remove the movement.
+  Transitions are shortened rather than removed so focus and hover states
+  still read as deliberate rather than instantaneous flicker.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.08ms !important;
+    scroll-behavior: auto !important;
+  }
+}
