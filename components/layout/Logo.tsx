@@ -1,6 +1,7 @@
 /**
- * The mark: a price level with risk below and reward above — the same idea the
- * whole product is built on, reduced to three strokes.
+ * The mark: a stop level and an entry level, with the gap between them
+ * measured by a small dimension bracket — literally what the product name
+ * describes. The same idea the whole calculator is built on, in five strokes.
  */
 export function Logo({ size = 26 }: { size?: number }) {
   return (
@@ -14,9 +15,32 @@ export function Logo({ size = 26 }: { size?: number }) {
     >
       <rect x="0.5" y="0.5" width="25" height="25" rx="7.5" className="stroke-line-strong" />
       <rect x="0.5" y="0.5" width="25" height="25" rx="7.5" className="fill-accent/[0.07]" />
-      <line x1="6" y1="8" x2="20" y2="8" className="stroke-reward" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
-      <line x1="6" y1="13" x2="20" y2="13" className="stroke-ink" strokeWidth="1.75" strokeLinecap="round" />
-      <line x1="6" y1="18" x2="20" y2="18" className="stroke-risk" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
+
+      {/* Stop level */}
+      <line
+        x1="6"
+        y1="8.5"
+        x2="15"
+        y2="8.5"
+        className="stroke-risk"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+      {/* Entry level */}
+      <line
+        x1="6"
+        y1="17.5"
+        x2="15"
+        y2="17.5"
+        className="stroke-ink"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+
+      {/* Dimension bracket measuring the gap between them — the "size" */}
+      <line x1="19.5" y1="8.5" x2="19.5" y2="17.5" className="stroke-accent" strokeWidth="1.25" />
+      <line x1="18" y1="8.5" x2="21" y2="8.5" className="stroke-accent" strokeWidth="1.25" strokeLinecap="round" />
+      <line x1="18" y1="17.5" x2="21" y2="17.5" className="stroke-accent" strokeWidth="1.25" strokeLinecap="round" />
     </svg>
   );
 }
