@@ -23,7 +23,7 @@ export default function GuidesIndexPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Riskline Trading Guides',
+    name: 'StopSize Trading Guides',
     itemListElement: ALL_GUIDES.map((guide, index) => ({
       '@type': 'ListItem',
       position: index + 1,

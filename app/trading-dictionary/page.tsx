@@ -39,7 +39,7 @@ export default async function DictionaryPage({ searchParams }: PageProps) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'DefinedTermSet',
-    name: 'Riskline Trading Dictionary',
+    name: 'StopSize Trading Dictionary',
     description: SITE.description,
     url: absoluteUrl('/trading-dictionary'),
     inLanguage: 'en-US',

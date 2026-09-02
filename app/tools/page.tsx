@@ -41,7 +41,7 @@ export default function ToolsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Riskline Trading Calculators',
+    name: 'StopSize Trading Calculators',
     itemListElement: [...TOOLS, ...EMBEDDED_TOOLS].map((tool, index) => ({
       '@type': 'ListItem',
       position: index + 1,

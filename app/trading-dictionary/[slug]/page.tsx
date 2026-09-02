@@ -84,7 +84,7 @@ export default async function TermPage({ params }: PageProps) {
     url: absoluteUrl(`/trading-dictionary/${term.slug}`),
     inDefinedTermSet: {
       '@type': 'DefinedTermSet',
-      name: 'Riskline Trading Dictionary',
+      name: 'StopSize Trading Dictionary',
       url: absoluteUrl('/trading-dictionary'),
     },
     termCode: term.slug,

@@ -5,7 +5,7 @@ import { DISCLAIMER, SITE } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'Disclaimer',
   description:
-    'Riskline provides educational information only. It is not financial, investment, or trading advice.',
+    'StopSize provides educational information only. It is not financial, investment, or trading advice.',
   alternates: { canonical: '/disclaimer' },
   robots: { index: true, follow: true },
 };

@@ -1,8 +1,8 @@
 {
-  "name": "riskline",
+  "name": "stopsize",
   "version": "1.0.0",
   "private": true,
-  "description": "Riskline — learn trading concepts and calculate your risk before you place a trade.",
+  "description": "StopSize — learn trading concepts and calculate your risk before you place a trade.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

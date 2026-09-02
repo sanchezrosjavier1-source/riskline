@@ -3,13 +3,13 @@
  * structured data, the sitemap and the header.
  */
 export const SITE = {
-  name: 'Riskline',
+  name: 'StopSize',
   tagline: 'Know the trade. Know the risk.',
   /** Kept under 158 characters so search results never truncate it. */
   description:
     'Learn trading concepts, understand the numbers, and calculate your risk before you trade. A free risk calculator and interactive trading dictionary.',
   /** Override at deploy time with NEXT_PUBLIC_SITE_URL. */
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://riskline.app',
+  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://stopsize.app',
   /** Public contact address, shown on /contact and /privacy. Change freely — used in one place. */
   contactEmail: 'triobucks09@gmail.com',
   locale: 'en_US',

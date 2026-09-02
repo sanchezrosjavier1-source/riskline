@@ -1,4 +1,4 @@
-# Riskline
+# StopSize
 
 **Know the trade. Know the risk.**
 
@@ -27,7 +27,7 @@ Then open <http://localhost:3000>.
 | `npm run typecheck` | Type-check without emitting |
 
 Set `NEXT_PUBLIC_SITE_URL` at deploy time so canonical URLs, Open Graph tags
-and the sitemap point at the real domain. It defaults to `https://riskline.app`.
+and the sitemap point at the real domain. It defaults to `https://stopsize.app`.
 
 ## Routes
 

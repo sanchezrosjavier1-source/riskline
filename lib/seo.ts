@@ -7,7 +7,7 @@ export const MAX_DESCRIPTION = 158;
 /** Titles are cut around 60 characters, including the brand suffix. */
 export const MAX_TITLE = 60;
 
-/** Characters the layout's title template appends: " · Riskline". */
+/** Characters the layout's title template appends: " · StopSize". */
 export const BRAND_SUFFIX_LENGTH = 11;
 
 /**

@@ -6,7 +6,7 @@ import { SITE } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description:
-    'How Riskline handles data: what is stored locally in your browser, what analytics and advertising partners may collect, and how to control it.',
+    'How StopSize handles data: what is stored locally in your browser, what analytics and advertising partners may collect, and how to control it.',
   alternates: { canonical: '/privacy' },
   robots: { index: true, follow: true },
 };

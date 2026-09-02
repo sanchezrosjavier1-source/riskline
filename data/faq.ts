@@ -16,9 +16,9 @@ export const FAQ_GROUPS: FaqGroup[] = [
     title: 'About the calculator',
     entries: [
       {
-        question: 'Is Riskline’s calculator financial advice?',
+        question: 'Is StopSize’s calculator financial advice?',
         answer:
-          'No. It performs arithmetic on numbers you provide — it does not recommend a trade, a direction, an entry price, or an instrument. Riskline provides educational information only, and nothing on this site should be treated as financial, investment, or trading advice.',
+          'No. It performs arithmetic on numbers you provide — it does not recommend a trade, a direction, an entry price, or an instrument. StopSize provides educational information only, and nothing on this site should be treated as financial, investment, or trading advice.',
         href: '/disclaimer',
         hrefLabel: 'Read the full disclaimer',
       },
@@ -30,9 +30,9 @@ export const FAQ_GROUPS: FaqGroup[] = [
         hrefLabel: 'Learn about slippage',
       },
       {
-        question: 'Why does my broker show a different position size than Riskline?',
+        question: 'Why does my broker show a different position size than StopSize?',
         answer:
-          'The most common reasons are rounding (Riskline rounds down to a whole share, contract, or lot, since your broker cannot fill a fraction of one), a different risk percentage than you intended, or a stop distance that does not match what you entered. Double-check the entry and stop prices first — a small difference there compounds through the whole calculation.',
+          'The most common reasons are rounding (StopSize rounds down to a whole share, contract, or lot, since your broker cannot fill a fraction of one), a different risk percentage than you intended, or a stop distance that does not match what you entered. Double-check the entry and stop prices first — a small difference there compounds through the whole calculation.',
       },
       {
         question: 'Can I use this for forex, crypto, or options?',
@@ -44,7 +44,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'What risk percentage per trade should I use?',
         answer:
-          'There is no universally correct number, and Riskline does not recommend one for your specific situation — that would be personalized advice, which this site does not provide. Common risk management frameworks use figures between 0.5% and 2% per trade. The right number for you depends on your risk tolerance, strategy, and how many trades you typically hold at once.',
+          'There is no universally correct number, and StopSize does not recommend one for your specific situation — that would be personalized advice, which this site does not provide. Common risk management frameworks use figures between 0.5% and 2% per trade. The right number for you depends on your risk tolerance, strategy, and how many trades you typically hold at once.',
         href: '/trading-dictionary/risk-per-trade',
         hrefLabel: 'Read about risk per trade',
       },
@@ -75,7 +75,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
         answer:
           'Yes — that kind of feedback is genuinely useful. Send the term through the contact page and it will be considered for a future addition.',
         href: '/contact',
-        hrefLabel: 'Contact Riskline',
+        hrefLabel: 'Contact StopSize',
       },
     ],
   },
@@ -95,9 +95,9 @@ export const FAQ_GROUPS: FaqGroup[] = [
         hrefLabel: 'Read the privacy policy',
       },
       {
-        question: 'Does Riskline use cookies?',
+        question: 'Does StopSize use cookies?',
         answer:
-          'Riskline does not set its own tracking cookies. If advertising is active, Google AdSense may set cookies subject to its own policies, and you are asked for consent before any non-essential cookie is set.',
+          'StopSize does not set its own tracking cookies. If advertising is active, Google AdSense may set cookies subject to its own policies, and you are asked for consent before any non-essential cookie is set.',
         href: '/privacy',
         hrefLabel: 'Read the privacy policy',
       },
