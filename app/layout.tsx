@@ -18,6 +18,21 @@ const mono = JetBrains_Mono({
   variable: '--font-mono',
 });
 
+/**
+ * Google's account-level AdSense identifier. Loading this script is how
+ * Google verifies site ownership during the application, and later how
+ * approved ad units actually render — it needs to be present now, not gated
+ * behind NEXT_PUBLIC_ADS_ENABLED (that flag controls the placeholder ad
+ * slots in components/layout/AdSlot.tsx, a separate, later step).
+ *
+ * Rendered as a literal <script> inside an explicit <head> below rather than
+ * via next/script, because next/script's `beforeInteractive` strategy only
+ * emits a <link rel="preload"> in the server-rendered HTML and injects the
+ * real <script> tag client-side after hydration — an automated verification
+ * checker that reads raw HTML rather than executing JS would never see it.
+ */
+const ADSENSE_CLIENT_ID = 'ca-pub-5178499537647593';
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
@@ -85,6 +100,13 @@ const organizationJsonLd = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+      <head>
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#main"
