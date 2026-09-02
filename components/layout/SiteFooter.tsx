@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CATEGORIES } from '@/data/categories';
 import { getPopularTerms } from '@/lib/dictionary';
+import { ALL_GUIDES } from '@/lib/guides';
 import { DISCLAIMER, SITE } from '@/lib/site';
 import { Logo } from './Logo';
 
@@ -12,7 +13,7 @@ const TOOL_LINKS = [
 ];
 
 export function SiteFooter() {
-  const popular = getPopularTerms(10);
+  const popular = getPopularTerms(8);
 
   return (
     <footer className="mt-24 border-t border-line bg-base-sunken/40">
@@ -29,7 +30,7 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <FooterColumn title="Tools">
               {TOOL_LINKS.map((link) => (
                 <FooterLink key={link.href} href={link.href}>
@@ -37,6 +38,14 @@ export function SiteFooter() {
                 </FooterLink>
               ))}
               <FooterLink href="/learn">Test Yourself</FooterLink>
+            </FooterColumn>
+
+            <FooterColumn title="Guides">
+              {ALL_GUIDES.map((guide) => (
+                <FooterLink key={guide.slug} href={`/guides/${guide.slug}`}>
+                  {guide.title}
+                </FooterLink>
+              ))}
             </FooterColumn>
 
             <FooterColumn title="Browse by topic">
@@ -52,11 +61,12 @@ export function SiteFooter() {
             </FooterColumn>
 
             <FooterColumn title="Popular terms">
-              {popular.slice(0, 7).map((term) => (
+              {popular.map((term) => (
                 <FooterLink key={term.slug} href={`/trading-dictionary/${term.slug}`}>
                   {term.term}
                 </FooterLink>
               ))}
+              <FooterLink href="/faq">FAQ</FooterLink>
             </FooterColumn>
           </div>
         </div>

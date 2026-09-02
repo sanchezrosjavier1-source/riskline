@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {
   ArrowRight,
   Calculator,
+  Clock,
   Compass,
   Gauge,
   Scale,
@@ -13,6 +14,7 @@ import { HeroTradeBuilder } from '@/components/calculator/HeroTradeBuilder';
 import { ButtonLink } from '@/components/ui/Button';
 import { CATEGORIES } from '@/data/categories';
 import { ALL_TERMS, countByCategory, getInteractiveTerms, getPopularTerms } from '@/lib/dictionary';
+import { ALL_GUIDES, getReadingMinutes } from '@/lib/guides';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -259,6 +261,64 @@ export default function HomePage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- guides */}
+      <section className="mx-auto max-w-[86rem] px-4 py-16 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="max-w-[46ch]">
+            <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-[1.75rem]">
+              Read the whole idea, not just the definition
+            </h2>
+            <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-muted">
+              Longer, worked-through pieces that connect several concepts at once — with a live
+              calculator built into each one.
+            </p>
+          </div>
+          <Link
+            href="/guides"
+            className="group inline-flex items-center gap-1.5 text-xs font-medium text-accent-soft transition-colors hover:text-accent"
+          >
+            See all guides
+            <ArrowRight
+              size={13}
+              aria-hidden
+              className="transition-transform duration-200 group-hover:translate-x-0.5"
+            />
+          </Link>
+        </div>
+
+        <div className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {ALL_GUIDES.slice(0, 3).map((guide) => (
+            <Link
+              key={guide.slug}
+              href={`/guides/${guide.slug}`}
+              className="group flex flex-col rounded-2xl border border-line bg-base-raised/40 p-5 transition-all duration-300 hover:border-accent/30 hover:bg-base-raised/70"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-lg border border-line bg-base-sunken/50 px-2.5 py-1 text-2xs text-ink-muted">
+                  {guide.topic}
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-2xs text-ink-ghost">
+                  <Clock size={11} aria-hidden />
+                  {getReadingMinutes(guide)} min
+                </span>
+              </div>
+              <h3 className="mt-4 text-[0.9375rem] font-semibold leading-snug text-ink transition-colors group-hover:text-accent-soft">
+                {guide.title}
+              </h3>
+              <p className="mt-2 flex-1 text-xs leading-relaxed text-ink-faint">{guide.dek}</p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent-soft">
+                Read the guide
+                <ArrowRight
+                  size={13}
+                  aria-hidden
+                  className="transition-transform duration-200 group-hover:translate-x-0.5"
+                />
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
 

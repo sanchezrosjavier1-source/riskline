@@ -19,6 +19,7 @@ export const NAV_LINKS = [
   { href: '/calculator', label: 'Risk Calculator' },
   { href: '/tools', label: 'Tools' },
   { href: '/trading-dictionary', label: 'Dictionary' },
+  { href: '/guides', label: 'Guides' },
   { href: '/learn', label: 'Test Yourself' },
 ] as const;
 
