@@ -41,7 +41,10 @@ and the sitemap point at the real domain. It defaults to `https://riskline.app`.
 | `/trading-dictionary` | Dynamic | Search, category filters, A–Z, recently viewed |
 | `/trading-dictionary/[slug]` | SSG × 135 | One indexable page per term |
 | `/learn` | Static | 12-question knowledge check |
+| `/about` | Static | What the product is and why it exists |
 | `/disclaimer` | Static | Educational-use disclaimer |
+| `/privacy` | Static | Privacy policy — required by AdSense |
+| `/contact` | Static | Contact email |
 | `/sitemap.xml`, `/robots.txt` | Static | Generated from the term data |
 
 `/calculator` accepts `?account=&risk=&direction=&entry=&stop=&tp=` so the
@@ -139,6 +142,20 @@ educational sections, inside dictionary pages and below tool results. Nothing
 renders unless `NEXT_PUBLIC_ADS_ENABLED=true`, so the layout is identical with
 ads on or off and adding a network later causes no layout shift. The calculator
 input and results area has no slot.
+
+`components/layout/ConsentBanner.tsx` records an accept/decline choice in
+`localStorage` (`lib/consent.ts`) before any non-essential cookie is expected
+to be set — required for EEA/UK traffic under Google's ad policies. It is a
+functional baseline; once AdSense is approved, either wire the real
+`adsbygoogle` script to gate on this stored choice (`AdSlot.tsx` documents the
+exact steps), or switch on AdSense's own "Privacy & messaging" (Funding
+Choices) in the dashboard, which is Google's native, pre-certified path and
+needs no extra code here.
+
+Applying for AdSense also requires `/privacy`, `/about` and `/contact` to
+exist and be reachable — they're built and linked from the footer. The one
+piece that cannot be prepared in advance is `public/ads.txt`, which needs the
+real publisher ID AdSense assigns on approval.
 
 ## Content
 

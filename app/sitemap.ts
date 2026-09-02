@@ -28,7 +28,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     { url: `${SITE.url}/learn`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${SITE.url}/about`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${SITE.url}/disclaimer`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${SITE.url}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${SITE.url}/contact`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
   ];
 
   const termRoutes: MetadataRoute.Sitemap = getAllSlugs().map((slug) => ({

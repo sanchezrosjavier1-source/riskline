@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
+import { ConsentBanner } from '@/components/layout/ConsentBanner';
 import { SITE } from '@/lib/site';
 
 const sans = Inter({
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <SiteFooter />
+        <ConsentBanner />
 
         <script
           type="application/ld+json"

@@ -79,10 +79,22 @@ export function SiteFooter() {
               Disclaimer
             </Link>
             <Link
-              href="/trading-dictionary"
+              href="/privacy"
               className="text-2xs text-ink-ghost transition-colors hover:text-ink-muted"
             >
-              Trading Dictionary
+              Privacy Policy
+            </Link>
+            <Link
+              href="/about"
+              className="text-2xs text-ink-ghost transition-colors hover:text-ink-muted"
+            >
+              About
+            </Link>
+            <Link
+              href="/contact"
+              className="text-2xs text-ink-ghost transition-colors hover:text-ink-muted"
+            >
+              Contact
             </Link>
           </div>
         </div>
