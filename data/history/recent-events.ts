@@ -1,0 +1,124 @@
+import type { HistoryEvent } from '@/types/history';
+
+export const recentEvents: HistoryEvent[] = [
+  {
+    slug: 'gamestop-short-squeeze-2021',
+    title: 'GameStop: How a Crowded Short Trade Turned Into a Squeeze',
+    shortTitle: 'The GameStop Squeeze',
+    date: 'January 2021',
+    year: 2021,
+    category: 'Leverage & Derivatives',
+    dek: 'A coordinated wave of retail buying, organized largely on social media, forced heavily shorted hedge funds to buy back shares at rapidly rising prices — sending GameStop up over 1,600% in weeks and inflicting billions in losses on short sellers.',
+    facts: [
+      { label: 'January 2021 gain (approx.)', value: '1,600%+' },
+      { label: 'Reported short interest before the squeeze', value: 'Over 100% of shares outstanding' },
+      { label: 'Best-known fund loss (Melvin Capital)', value: 'Reported over 50% for the month' },
+    ],
+    body: [
+      'Heading into January 2021, GameStop was a struggling video game retailer that a large number of hedge funds had bet against by short selling — so many, in fact, that reported short interest exceeded 100% of the company\'s available shares, an unusually crowded and, in hindsight, precarious position for the short sellers.',
+      'A large, organized community of retail traders, coordinating largely through the Reddit forum r/WallStreetBets, identified this crowded short position and began buying the stock and call options in large numbers, driving the price higher. As the price rose, funds holding short positions faced mounting losses and were forced to buy shares to close out their positions and limit further damage — buying that pushed the price higher still, forcing more short covering in a self-reinforcing loop known as a short squeeze.',
+      'GameStop rose from under $20 to an intraday high above $480 within about three weeks. Several hedge funds with large short positions suffered severe losses, most notably Melvin Capital, which required a multi-billion dollar capital injection from other investors to stay afloat and closed entirely about a year later.',
+    ],
+    lesson: [
+      'The GameStop squeeze is the modern definitive case study in short interest risk: an extremely crowded short position, however well-reasoned the original thesis, creates a specific structural vulnerability — a sharp enough rally forces exactly the buying that accelerates the rally further, independent of the company\'s actual fundamentals.',
+      'It is also worth noting what this event does not prove: for every well-known short squeeze, there are far more heavily shorted stocks that simply continued declining as the short sellers expected. The squeeze is a real and specific risk that short sellers must size for, not a repeatable strategy for the traders on the other side to rely on.',
+    ],
+    relatedTerms: ['short', 'short-interest', 'liquidity', 'volatility', 'margin-call'],
+  },
+  {
+    slug: 'archegos-collapse-2021',
+    title: 'Archegos Capital: How One Fund\'s Hidden Leverage Cost Banks Billions',
+    shortTitle: 'The Archegos Collapse',
+    date: 'March 2021',
+    year: 2021,
+    category: 'Leverage & Derivatives',
+    dek: 'A little-known family office built enormous, highly leveraged concentrated positions through opaque derivatives, and its collapse in a single week forced a fire sale that cost global banks billions and helped end the careers of several senior executives.',
+    facts: [
+      { label: 'Estimated exposure before collapse', value: 'Reported around $100 billion' },
+      { label: 'Bank losses (combined, reported)', value: '$10 billion+' },
+      { label: 'Time to unwind', value: 'Days' },
+    ],
+    body: [
+      'Archegos Capital Management was a family office (a private investment firm managing one individual\'s wealth) run by Bill Hwang, who built extremely large, concentrated positions in a small number of stocks. Rather than holding shares directly, Archegos used a derivative called a total return swap, arranged separately through multiple different banks, which allowed it to gain the economic exposure of owning the stock with far less capital and, crucially, without any single bank seeing the full picture of its total position across all of them.',
+      'When several of Archegos\'s concentrated holdings fell sharply in March 2021, the fund faced margin calls it could not meet. Because its exposure was spread across several banks who each only knew their own piece of it, no single institution had the full picture of how large and fragile the total position really was until it started to unwind.',
+      'The banks involved were forced to sell enormous blocks of stock to cover their exposure, sending prices in the affected names falling further and faster. Some banks, including Credit Suisse and Nomura, moved quickly and still suffered billions in losses; the episode was a contributing factor in Credit Suisse\'s further troubles in the years that followed.',
+    ],
+    lesson: [
+      'Archegos shows how leverage and concentration can hide in plain sight through financial engineering — the fund\'s risk was not visible in any single institution\'s records, only in the sum of exposures no one party could see. For an individual trader, the analogous lesson is simpler and more direct: concentrating a large, leveraged position in very few names removes the diversification that would otherwise contain a single bad outcome.',
+      'It is also a case study in margin calls as a forcing function. A leveraged position does not fail gradually when it goes wrong — a margin call converts an unrealized loss into a forced, immediate sale, often at the worst possible price, exactly when the position has already moved against you.',
+    ],
+    relatedTerms: ['leverage', 'margin-call', 'correlation-risk', 'portfolio-heat', 'liquidity'],
+  },
+  {
+    slug: 'terra-luna-collapse-2022',
+    title: 'Terra/LUNA: How an Algorithmic Stablecoin Lost Its Peg and $40 Billion',
+    shortTitle: 'The Terra/LUNA Collapse',
+    date: 'May 2022',
+    year: 2022,
+    category: 'Crypto',
+    dek: 'TerraUSD, a stablecoin designed to hold its dollar peg through an algorithmic relationship with a sister token called LUNA, collapsed within days, erasing roughly $40 billion in value and triggering a wave of losses across the crypto industry.',
+    facts: [
+      { label: 'Combined value erased (approx.)', value: '$40 billion' },
+      { label: 'Time from depeg to near-zero', value: 'About one week' },
+      { label: 'Peg mechanism', value: 'Algorithmic, not backed by cash reserves' },
+    ],
+    body: [
+      'TerraUSD (UST) was a "stablecoin" — a crypto asset intended to always be worth $1 — but unlike stablecoins backed by cash or cash-equivalent reserves, its peg was maintained algorithmically through a relationship with a second token, LUNA. In simplified terms, users could always trade $1 of UST for $1 worth of newly created LUNA and vice versa, a mechanism intended to arbitrage the price back to the peg automatically.',
+      'In May 2022, a large sale of UST pushed it slightly below its $1 peg. As traders tried to exit, the mechanism that was supposed to restore the peg instead required minting enormous quantities of LUNA to absorb the selling, which collapsed LUNA\'s own price — which in turn undermined confidence in the mechanism defending UST\'s peg, in a rapidly accelerating feedback loop.',
+      'Within about a week, both tokens had fallen to a small fraction of a cent, erasing roughly $40 billion in combined value and triggering a wave of forced selling and insolvencies across crypto lenders and funds that had significant exposure to the ecosystem, contributing to a broader crypto market downturn that year.',
+    ],
+    lesson: [
+      'The core lesson is that "stable" in stablecoin describes an intended design goal, not a guarantee — the mechanism backing that stability matters enormously, and an algorithmic peg with no hard, liquid reserve behind it carries fundamentally different risk than one backed by cash held one-to-one.',
+      'It is also a case study in reflexive collapse: a system where the very act of participants losing confidence directly weakens the mechanism meant to justify their confidence, creating a self-reinforcing spiral that can move from a minor wobble to near-total loss within days rather than the months or years a comparable decline might take in other markets.',
+    ],
+    relatedTerms: ['stablecoin', 'volatility', 'liquidity', 'correlation-risk', 'risk-of-ruin'],
+  },
+  {
+    slug: 'ftx-collapse-2022',
+    title: 'FTX: When a Trusted Exchange Was Secretly Insolvent',
+    shortTitle: 'The FTX Collapse',
+    date: 'November 2022',
+    year: 2022,
+    category: 'Fraud & Collapse',
+    dek: 'FTX, one of the largest cryptocurrency exchanges in the world, collapsed within days after reporting revealed customer funds had been used to cover losses at a related trading firm — a stark lesson in counterparty and custody risk.',
+    facts: [
+      { label: 'Reported valuation before collapse', value: '~$32 billion' },
+      { label: 'Time from first reports to bankruptcy', value: 'About one week' },
+      { label: 'Outcome', value: 'Founder later convicted of fraud' },
+    ],
+    body: [
+      'FTX was, at its peak, one of the largest cryptocurrency exchanges in the world by trading volume, backed by prominent investors and widely marketed as a trustworthy, well-capitalized platform. Customers deposited cryptocurrency and cash onto the platform to trade, generally trusting that their funds were held safely and separately from the exchange\'s own business operations, as is standard practice at reputable financial institutions.',
+      'In November 2022, reporting revealed that a large portion of customer funds had, in fact, been transferred to Alameda Research, a separate trading firm founded by the same individual, and used to cover Alameda\'s trading losses and fund other expenses — leaving FTX unable to return customer deposits on request.',
+      'Once the extent of the shortfall became clear, a wave of withdrawal requests exceeded what FTX could pay out, and the exchange filed for bankruptcy within about a week of the first reports. Its founder, Sam Bankman-Fried, was later convicted of fraud and related charges.',
+    ],
+    lesson: [
+      'FTX is the defining modern lesson in counterparty and custody risk: an asset sitting on an exchange is not the same as an asset you directly control, and the platform\'s reputation, size, or the prominence of its investors is not proof that customer funds are actually segregated and safe.',
+      'For anyone holding assets on any third-party platform — crypto exchange, broker, or otherwise — it reinforces a simple, practical habit: keep on any single platform only what you need for active trading, rather than treating it as a long-term store of savings, precisely because you generally cannot verify from the outside whether your funds are being handled the way you assume.',
+    ],
+    relatedTerms: ['cold-storage', 'spot-market', 'broker', 'liquidity', 'risk-management'],
+  },
+  {
+    slug: 'uk-gilt-crisis-2022',
+    title: 'The UK Gilt Crisis: How Leveraged Pension Funds Nearly Broke the Bond Market',
+    shortTitle: 'The UK Gilt Crisis',
+    date: 'September 2022',
+    year: 2022,
+    category: 'Systemic Risk',
+    dek: 'A UK government budget announcement triggered a sharp bond selloff that exposed hidden leverage inside pension funds, forcing an emergency central bank intervention within days to prevent a broader financial spiral.',
+    facts: [
+      { label: '30-year gilt yield move', value: 'Sharpest in decades, in days' },
+      { label: 'Bank of England response', value: 'Emergency bond-buying program' },
+      { label: 'Time from budget to intervention', value: 'About 3 days' },
+    ],
+    body: [
+      'In September 2022, the UK government announced a package of large, unfunded tax cuts. Markets reacted by selling UK government bonds (known as gilts) sharply, pushing yields up at a pace rarely seen in developed government bond markets, which are usually among the most stable assets in the financial system.',
+      'The speed of the move exposed a hidden vulnerability in UK pension funds, many of which used a strategy called Liability-Driven Investment (LDI), involving leveraged derivative positions to manage their long-term obligations. As gilt yields spiked, these funds faced margin calls and needed to raise cash quickly — often by selling more gilts, which pushed yields higher still, in a feedback loop threatening to spiral out of control within the space of days.',
+      'The Bank of England intervened with an emergency, temporary bond-buying program specifically to calm the gilt market and give pension funds time to reduce their leverage in an orderly way, describing the risk to broader financial stability as material. The controversial parts of the budget were reversed within weeks, and the UK Prime Minister who introduced it resigned shortly after.',
+    ],
+    lesson: [
+      'The gilt crisis shows that leverage risk is not confined to hedge funds or crypto exchanges — it can sit quietly inside institutions as conservative-sounding as pension funds, invisible until a fast enough move in an otherwise "safe" asset class exposes it.',
+      'It also illustrates, at the scale of an entire government bond market, the same margin-call feedback loop that shows up throughout this history at smaller scale: a leveraged position facing a margin call is often forced to sell into the very decline causing the problem, deepening it — whether that leveraged position belongs to a single trader or an entire industry.',
+    ],
+    relatedTerms: ['leverage', 'margin-call', 'liquidity', 'volatility', 'correlation-risk'],
+  },
+];

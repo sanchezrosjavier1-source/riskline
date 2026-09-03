@@ -15,6 +15,7 @@ import { ButtonLink } from '@/components/ui/Button';
 import { CATEGORIES } from '@/data/categories';
 import { ALL_TERMS, countByCategory, getInteractiveTerms, getPopularTerms } from '@/lib/dictionary';
 import { ALL_GUIDES, getReadingMinutes } from '@/lib/guides';
+import { ALL_HISTORY_EVENTS } from '@/lib/history';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -404,6 +405,68 @@ export default function HomePage() {
             >
               Browse all {ALL_TERMS.length} terms
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- market history */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-[86rem] px-4 py-16 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="max-w-[46ch]">
+              <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-[1.75rem]">
+                The risk lessons markets already paid for
+              </h2>
+              <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-muted">
+                Twenty landmark events, 1987 to 2022, each ending in the risk-management lesson
+                still worth knowing.
+              </p>
+            </div>
+            <Link
+              href="/market-history"
+              className="group inline-flex items-center gap-1.5 text-xs font-medium text-accent-soft transition-colors hover:text-accent"
+            >
+              See all 20 events
+              <ArrowRight
+                size={13}
+                aria-hidden
+                className="transition-transform duration-200 group-hover:translate-x-0.5"
+              />
+            </Link>
+          </div>
+
+          <div className="mt-9 grid gap-3 sm:grid-cols-3">
+            {['black-monday-1987', 'global-financial-crisis-2008', 'gamestop-short-squeeze-2021']
+              .map((slug) => ALL_HISTORY_EVENTS.find((event) => event.slug === slug))
+              .filter((event): event is (typeof ALL_HISTORY_EVENTS)[number] => Boolean(event))
+              .map((event) => (
+                <Link
+                  key={event.slug}
+                  href={`/market-history/${event.slug}`}
+                  className="group flex flex-col rounded-2xl border border-line bg-base-raised/40 p-5 transition-all duration-300 hover:border-accent/30 hover:bg-base-raised/70"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="display-num text-2xl leading-none text-ink-ghost transition-colors group-hover:text-accent">
+                      {event.year}
+                    </span>
+                    <span className="rounded-md border border-line px-2 py-0.5 text-2xs text-ink-faint">
+                      {event.category}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 text-[0.9375rem] font-semibold leading-snug text-ink transition-colors group-hover:text-accent-soft">
+                    {event.title}
+                  </h3>
+                  <p className="mt-2 flex-1 text-xs leading-relaxed text-ink-faint">{event.dek}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent-soft">
+                    Read what happened
+                    <ArrowRight
+                      size={13}
+                      aria-hidden
+                      className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    />
+                  </span>
+                </Link>
+              ))}
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllSlugs } from '@/lib/dictionary';
 import { getAllGuideSlugs } from '@/lib/guides';
+import { getAllHistorySlugs } from '@/lib/history';
 import { SITE } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -29,6 +30,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     { url: `${SITE.url}/guides`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+    {
+      url: `${SITE.url}/market-history`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     { url: `${SITE.url}/learn`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE.url}/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE.url}/about`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
@@ -51,5 +58,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...termRoutes, ...guideRoutes];
+  const historyRoutes: MetadataRoute.Sitemap = getAllHistorySlugs().map((slug) => ({
+    url: `${SITE.url}/market-history/${slug}`,
+    lastModified: now,
+    changeFrequency: 'yearly',
+    priority: 0.65,
+  }));
+
+  return [...staticRoutes, ...termRoutes, ...guideRoutes, ...historyRoutes];
 }

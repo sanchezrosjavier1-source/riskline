@@ -3,9 +3,10 @@
 **Know the trade. Know the risk.**
 
 An interactive trading education platform: a professional risk calculator, a
-135-term trading dictionary, six long-form guides, and an FAQ — built as one
-connected product. Every calculated result links to the concept behind it,
-and most concepts carry a working calculator inside the explanation.
+135-term trading dictionary, six long-form guides, 20 landmark market events,
+and an FAQ — built as one connected product. Every calculated result links to
+the concept behind it, and most concepts carry a working calculator inside
+the explanation.
 
 The loop the product is built around: **learn → understand → calculate → explore.**
 
@@ -21,7 +22,7 @@ Then open <http://localhost:3000>.
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Development server with hot reload |
-| `npm run build` | Production build (prerenders all 158 routes) |
+| `npm run build` | Production build (prerenders all 181 routes) |
 | `npm start` | Serve the production build |
 | `npm test` | Run the test suite (570 tests) |
 | `npm run typecheck` | Type-check without emitting |
@@ -42,6 +43,8 @@ and the sitemap point at the real domain. It defaults to `https://stopsize.com`.
 | `/trading-dictionary/[slug]` | SSG × 135 | One indexable page per term |
 | `/guides` | Static | Index of long-form guides |
 | `/guides/[slug]` | SSG × 6 | A full concept worked through with tables, diagrams and a live calculator |
+| `/market-history` | Static | 20 landmark market events, 1987–2022, chronological |
+| `/market-history/[slug]` | SSG × 20 | What happened, key facts, and the risk lesson — closed history, not news |
 | `/faq` | Static | 15 questions across 4 groups, with `FAQPage` structured data |
 | `/learn` | Static | 12-question knowledge check |
 | `/about` | Static | What the product is and why it exists |
@@ -67,6 +70,7 @@ components/
 data/
   terms/                 135 terms, one file per category
   guides/                6 long-form guides, one file each
+  history/               20 market events, grouped into 4 files by era
   categories.ts          Category definitions
   tools.ts               Tool registry
   quiz.ts                Quiz questions
@@ -76,6 +80,7 @@ lib/
   format.ts              Currency, price, percent, ratio formatting
   dictionary.ts          Lookup, relations, navigation
   guides.ts              Same pattern as dictionary.ts, for guides
+  history.ts             Same pattern again, for market history
   search.ts              Ranked search over a lightweight index
   palette.ts             Color source of truth (Tailwind reads this)
   seo.ts                 Title and description builders
@@ -114,7 +119,7 @@ alias → substring → definition, with popular terms nudged up on ties.
 
 ## Testing
 
-570 tests across six suites, run with `npm test`:
+647 tests across seven suites, run with `npm test`:
 
 - **`trade-math.test.ts`** — the worked example, long/short symmetry, invalid
   input (zero, negative, `NaN`, `Infinity`, inverted stops and targets), extreme
@@ -128,6 +133,10 @@ alias → substring → definition, with popular terms nudged up on ties.
   term and tool link resolves, and the prev/next chain is continuous.
 - **`faq.test.ts`** — every question is substantial and unique, and every link
   resolves to a real term, guide, or static route.
+- **`history.test.ts`** — exactly 20 events, sorted chronologically, spanning a
+  real range of years and categories, every fact/body/lesson paragraph meets a
+  minimum depth, every related term resolves, and no lesson is worded as a
+  guarantee of future results.
 - **`seo.test.ts`** — every generated title and meta description fits inside
   search-result truncation limits.
 - **`palette.test.ts`** — every text color clears WCAG AA (4.5:1) against every
@@ -182,5 +191,11 @@ diagram or an embedded calculator, ending in a tested cross-link to the
 dictionary terms and tools it draws on. The FAQ (`data/faq.ts`) answers 15
 concrete questions across four groups — the calculator, the dictionary, data
 and privacy, and the concepts themselves — with `FAQPage` structured data.
+
+Market History (`data/history/`) is 20 landmark events from 1987 to 2022 —
+Black Monday through FTX — each with key facts, what happened, and a
+risk-management lesson. Deliberately chosen over a news section: these are
+closed, verifiable events rather than content that goes stale and needs
+maintaining, which fits a site not being actively updated going forward.
 
 Nothing here is financial advice. See `/disclaimer`.

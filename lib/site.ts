@@ -20,6 +20,7 @@ export const NAV_LINKS = [
   { href: '/tools', label: 'Tools' },
   { href: '/trading-dictionary', label: 'Dictionary' },
   { href: '/guides', label: 'Guides' },
+  { href: '/market-history', label: 'History' },
   { href: '/learn', label: 'Test Yourself' },
 ] as const;
 

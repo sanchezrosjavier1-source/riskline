@@ -12,6 +12,16 @@ const TOOL_LINKS = [
   { href: '/tools', label: 'All tools' },
 ];
 
+/** A spread across decades and categories, not just the most recent events. */
+const FEATURED_HISTORY = [
+  { slug: 'black-monday-1987', label: 'Black Monday (1987)' },
+  { slug: 'global-financial-crisis-2008', label: 'The 2008 Financial Crisis' },
+  { slug: 'flash-crash-2010', label: 'The 2010 Flash Crash' },
+  { slug: 'swiss-franc-shock-2015', label: 'The Swiss Franc Shock' },
+  { slug: 'gamestop-short-squeeze-2021', label: 'The GameStop Squeeze' },
+  { slug: 'ftx-collapse-2022', label: 'The FTX Collapse' },
+];
+
 export function SiteFooter() {
   const popular = getPopularTerms(8);
 
@@ -46,6 +56,15 @@ export function SiteFooter() {
                   {guide.title}
                 </FooterLink>
               ))}
+            </FooterColumn>
+
+            <FooterColumn title="Market History">
+              {FEATURED_HISTORY.map((event) => (
+                <FooterLink key={event.slug} href={`/market-history/${event.slug}`}>
+                  {event.label}
+                </FooterLink>
+              ))}
+              <FooterLink href="/market-history">All 20 events</FooterLink>
             </FooterColumn>
 
             <FooterColumn title="Browse by topic">
