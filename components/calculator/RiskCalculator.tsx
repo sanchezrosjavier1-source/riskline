@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Bookmark,
+  ChevronDown,
   Info,
   RotateCcw,
   Trash2,
@@ -128,6 +129,12 @@ const LOT_SIZES: LotSizeOption[] = [
   { value: 'micro', label: 'Micro (1k)', units: 1_000 },
 ];
 
+/** Currency for normal prices, extra decimals for sub-$1 instruments like forex pairs. */
+function priceLabel(value: number | null | undefined): string {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return PLACEHOLDER;
+  return Math.abs(value) < 1 ? formatPrice(value) : formatCurrency(value);
+}
+
 const PRESETS: Array<{ name: string; note: string; values: Required<CalculatorInitialValues> }> = [
   {
     name: 'Stock swing',
@@ -193,6 +200,11 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
     FUTURES_PRESETS[0].multiplier,
   );
   const [lotSize, setLotSize] = useState<LotSizeOption['value']>('standard');
+  // Progressive disclosure: a first-time user should see four inputs and one
+  // answer. Everything that only matters once you know what you're doing —
+  // targets, instrument type, contract specs — stays folded away until asked for.
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAllMetrics, setShowAllMetrics] = useState(false);
   const [saved, setSaved] = useSessionState<SavedScenario[]>('riskline:scenarios', []);
 
   const marketConfig = MARKETS.find((m) => m.value === market) ?? MARKETS[0];
@@ -226,6 +238,15 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
   const warnings = result.issues.filter((issue) => issue.level === 'warning');
 
   const lots = market === 'forex' && result.valid ? result.positionSize / lotConfig.units : null;
+
+  // Tells the user what is folded away without making them open it.
+  const advancedSummary = [
+    marketConfig.label,
+    market === 'futures' ? `${formatCurrency(contractMultiplier ?? 0)}/pt` : null,
+    takeProfit ? `target ${priceLabel(takeProfit)}` : 'no target',
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   const changeMarket = (next: Market) => {
     setMarket(next);
@@ -376,7 +397,33 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                   : 'Place it above your entry.'
             }
           />
+        </div>
 
+        {/* ------------------------------------------------------ advanced */}
+        <div className="mt-4 border-t border-line pt-4">
+          <button
+            type="button"
+            aria-expanded={showAdvanced}
+            onClick={() => setShowAdvanced((prev) => !prev)}
+            className="flex w-full items-center justify-between gap-3 rounded-lg px-1 py-1 text-left transition-colors hover:bg-white/[0.03]"
+          >
+            <span className="text-xs font-medium text-ink-muted">Advanced options</span>
+            <span className="flex min-w-0 items-center gap-2">
+              {!showAdvanced && (
+                <span className="truncate text-2xs text-ink-ghost">{advancedSummary}</span>
+              )}
+              <ChevronDown
+                size={14}
+                aria-hidden
+                className={`shrink-0 text-ink-faint transition-transform duration-300 ${
+                  showAdvanced ? 'rotate-180' : ''
+                }`}
+              />
+            </span>
+          </button>
+        </div>
+
+        <div className={`space-y-4 ${showAdvanced ? 'mt-4' : 'hidden'}`}>
           <NumberField
             label="Take Profit"
             value={takeProfit}
@@ -508,7 +555,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
         )}
 
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,300px)]">
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="space-y-3">
             <Stat
               label="Position Size"
               emphasis
@@ -544,8 +591,9 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
               </Explain>
             </Stat>
 
-            <Stat
-              label="Maximum Risk"
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Stat
+                label="Maximum Risk"
               emphasis
               tone="risk"
               value={
@@ -565,16 +613,53 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                 The most you intend to lose if this trade fails. Everything else is calculated
                 backward from this number, which is why it is set first.
               </Explain>
-            </Stat>
+              </Stat>
 
+              <Stat
+                label="Potential Loss"
+                tone="risk"
+                value={
+                  result.valid ? (
+                    <AnimatedNumber value={-result.potentialLoss} format={(v) => formatCurrency(v)} />
+                  ) : (
+                    PLACEHOLDER
+                  )
+                }
+                sub={result.valid ? 'If the stop is hit as planned' : undefined}
+              />
+            </div>
+
+            {/* Everything below is true but secondary — folded away so the answer
+                above is the thing a first-time user actually sees. */}
+            <button
+              type="button"
+              aria-expanded={showAllMetrics}
+              onClick={() => setShowAllMetrics((prev) => !prev)}
+              className="flex w-full items-center justify-between gap-3 rounded-lg border border-line px-4 py-2.5 text-left transition-colors hover:border-line-strong hover:bg-white/[0.02]"
+            >
+              <span className="text-xs font-medium text-ink-muted">
+                {showAllMetrics ? 'Hide detail' : 'More detail'}
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-2xs text-ink-ghost">
+                  Exposure, reward, R:R{result.riskRewardRatio ? ` ${formatRatio(result.riskRewardRatio)}` : ''}
+                </span>
+                <ChevronDown
+                  size={14}
+                  aria-hidden
+                  className={`shrink-0 text-ink-faint transition-transform duration-300 ${
+                    showAllMetrics ? 'rotate-180' : ''
+                  }`}
+                />
+              </span>
+            </button>
+
+            <div className={`gap-3 sm:grid-cols-2 ${showAllMetrics ? 'grid' : 'hidden'}`}>
             <Stat
               label={`Risk Per ${unit}`}
               value={
                 result.valid ? (
-                  <AnimatedNumber
-                    value={result.dollarRiskPerUnit}
-                    format={(v) => (v !== null && Math.abs(v) < 1 ? formatPrice(v) : formatCurrency(v))}
-                  />
+                  <AnimatedNumber value={result.dollarRiskPerUnit} format={priceLabel} />
                 ) : (
                   PLACEHOLDER
                 )
@@ -614,19 +699,6 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                 the position occupies. Above 100% of your account, it needs margin to fund.
               </Explain>
             </Stat>
-
-            <Stat
-              label="Potential Loss"
-              tone="risk"
-              value={
-                result.valid ? (
-                  <AnimatedNumber value={-result.potentialLoss} format={(v) => formatCurrency(v)} />
-                ) : (
-                  PLACEHOLDER
-                )
-              }
-              sub={result.valid ? 'If the stop is hit as planned' : undefined}
-            />
 
             <Stat
               label="Potential Profit"
@@ -693,6 +765,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                 recover.
               </Explain>
             </Stat>
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -733,7 +806,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
           </div>
         )}
 
-        <MathBreakdown input={input} result={result} unit={unit} />
+        <MathBreakdown input={input} result={result} unit={unit} defaultOpen={false} />
 
         {saved.length > 0 && (
           <section className="panel-flat p-5">
