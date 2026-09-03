@@ -1,5 +1,8 @@
 export type Direction = 'long' | 'short';
 
+/** Which kind of instrument is being sized — changes units and, for futures, the math itself. */
+export type Market = 'stocks' | 'forex' | 'futures' | 'crypto';
+
 export interface TradeInput {
   /** Total capital in the trading account, in account currency. */
   accountSize: number;
@@ -10,6 +13,13 @@ export interface TradeInput {
   stopLoss: number;
   /** Optional profit target. Reward figures are only produced when this is valid. */
   takeProfit?: number | null;
+  /**
+   * Dollars of P&L per 1.00 of price movement, per unit traded — e.g. a CME
+   * E-mini S&P (ES) contract moves $50 per index point. Defaults to 1, which
+   * is correct for stocks, forex (priced in raw currency units) and crypto,
+   * where one unit of price movement equals one unit of account currency.
+   */
+  contractMultiplier?: number;
 }
 
 export type IssueLevel = 'error' | 'warning';
@@ -36,9 +46,11 @@ export interface TradeResult {
 
   /** accountSize x riskPercent — the most you intend to lose. */
   maxRisk: number;
-  /** Distance between entry and stop, per share/unit/contract. */
+  /** Raw price distance between entry and stop — independent of the contract multiplier. */
   riskPerUnit: number;
-  /** maxRisk / riskPerUnit — how many units to trade. */
+  /** riskPerUnit x contractMultiplier — the actual account-currency loss per unit/contract. */
+  dollarRiskPerUnit: number;
+  /** maxRisk / dollarRiskPerUnit — how many units/contracts to trade. */
   positionSize: number;
   /** positionSize rounded down to a whole tradable unit. */
   positionSizeWhole: number;

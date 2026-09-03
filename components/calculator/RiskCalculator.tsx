@@ -21,13 +21,15 @@ import { MathBreakdown } from './MathBreakdown';
 import { calculateTrade } from '@/lib/trade-math';
 import {
   formatCurrency,
+  formatNumber,
   formatPercent,
+  formatPrice,
   formatRatio,
   formatUnits,
   PLACEHOLDER,
 } from '@/lib/format';
 import { useSessionState } from '@/lib/hooks';
-import type { Direction, IssueField, TradeInput } from '@/types/trade';
+import type { Direction, IssueField, Market, TradeInput } from '@/types/trade';
 
 export interface CalculatorInitialValues {
   accountSize?: number;
@@ -48,13 +50,83 @@ const DEFAULTS: Required<Omit<CalculatorInitialValues, 'takeProfit'>> & { takePr
     takeProfit: 56,
   };
 
-const UNITS = [
-  { value: 'Share', label: 'Shares' },
-  { value: 'Unit', label: 'Units' },
-  { value: 'Contract', label: 'Contracts' },
+interface MarketConfig {
+  value: Market;
+  label: string;
+  unit: string;
+  unitPlural: string;
+  /** Shown under "Your trade" so the unit switch reads as more than cosmetic. */
+  note: string;
+  /**
+   * Example prices shown when a trader switches into this market. A stock's
+   * $50/$48 example is meaningless for forex (where prices move in pips) or
+   * futures (which trade in points), so the example has to change with it.
+   */
+  example: { entry: number; stopLoss: number; takeProfit: number };
+}
+
+const MARKETS: MarketConfig[] = [
+  {
+    value: 'stocks',
+    label: 'Stocks',
+    unit: 'Share',
+    unitPlural: 'shares',
+    note: 'Equities & ETFs',
+    example: { entry: 50, stopLoss: 48, takeProfit: 56 },
+  },
+  {
+    value: 'forex',
+    label: 'Forex',
+    unit: 'Unit',
+    unitPlural: 'units',
+    note: 'Sized in lots',
+    example: { entry: 1.085, stopLoss: 1.08, takeProfit: 1.095 },
+  },
+  {
+    value: 'futures',
+    label: 'Futures',
+    unit: 'Contract',
+    unitPlural: 'contracts',
+    note: 'Uses a contract multiplier',
+    example: { entry: 5000, stopLoss: 4990, takeProfit: 5030 },
+  },
+  {
+    value: 'crypto',
+    label: 'Crypto',
+    unit: 'Coin',
+    unitPlural: 'coins',
+    note: 'Fractional sizing',
+    example: { entry: 60000, stopLoss: 58000, takeProfit: 66000 },
+  },
+];
+
+/**
+ * Real CME point values. A futures contract's P&L per point of price
+ * movement is fixed by the exchange, not something a trader chooses — this
+ * is what makes futures math genuinely different from stocks, not just a
+ * different label on the same arithmetic.
+ */
+const FUTURES_PRESETS = [
+  { symbol: 'ES', name: 'E-mini S&P 500', multiplier: 50 },
+  { symbol: 'MES', name: 'Micro E-mini S&P', multiplier: 5 },
+  { symbol: 'NQ', name: 'E-mini Nasdaq-100', multiplier: 20 },
+  { symbol: 'MNQ', name: 'Micro E-mini Nasdaq', multiplier: 2 },
+  { symbol: 'YM', name: 'E-mini Dow', multiplier: 5 },
+  { symbol: 'CL', name: 'Crude Oil', multiplier: 1000 },
+  { symbol: 'GC', name: 'Gold', multiplier: 100 },
 ] as const;
 
-type UnitName = (typeof UNITS)[number]['value'];
+interface LotSizeOption {
+  value: 'standard' | 'mini' | 'micro';
+  label: string;
+  units: number;
+}
+
+const LOT_SIZES: LotSizeOption[] = [
+  { value: 'standard', label: 'Standard (100k)', units: 100_000 },
+  { value: 'mini', label: 'Mini (10k)', units: 10_000 },
+  { value: 'micro', label: 'Micro (1k)', units: 1_000 },
+];
 
 const PRESETS: Array<{ name: string; note: string; values: Required<CalculatorInitialValues> }> = [
   {
@@ -99,7 +171,8 @@ interface SavedScenario {
   id: string;
   label: string;
   input: TradeInput;
-  unit: UnitName;
+  market: Market;
+  lotSize: LotSizeOption['value'];
 }
 
 export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues }) {
@@ -115,8 +188,17 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
   const [takeProfit, setTakeProfit] = useState<number | null>(
     initial?.takeProfit === undefined ? DEFAULTS.takeProfit : initial.takeProfit,
   );
-  const [unit, setUnit] = useState<UnitName>('Share');
+  const [market, setMarket] = useState<Market>('stocks');
+  const [contractMultiplier, setContractMultiplier] = useState<number | null>(
+    FUTURES_PRESETS[0].multiplier,
+  );
+  const [lotSize, setLotSize] = useState<LotSizeOption['value']>('standard');
   const [saved, setSaved] = useSessionState<SavedScenario[]>('riskline:scenarios', []);
+
+  const marketConfig = MARKETS.find((m) => m.value === market) ?? MARKETS[0];
+  const unit = marketConfig.unit;
+  const unitPlural = marketConfig.unitPlural;
+  const lotConfig = LOT_SIZES.find((l) => l.value === lotSize) ?? LOT_SIZES[0];
 
   const input: TradeInput = useMemo(
     () => ({
@@ -126,8 +208,9 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
       entry: entry ?? Number.NaN,
       stopLoss: stopLoss ?? Number.NaN,
       takeProfit,
+      contractMultiplier: market === 'futures' ? (contractMultiplier ?? 1) : undefined,
     }),
-    [accountSize, riskPercent, direction, entry, stopLoss, takeProfit],
+    [accountSize, riskPercent, direction, entry, stopLoss, takeProfit, market, contractMultiplier],
   );
 
   const result = useMemo(() => calculateTrade(input), [input]);
@@ -141,8 +224,19 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
   }, [result.issues]);
 
   const warnings = result.issues.filter((issue) => issue.level === 'warning');
-  const unitLower = unit.toLowerCase();
-  const unitPlural = `${unitLower}s`;
+
+  const lots = market === 'forex' && result.valid ? result.positionSize / lotConfig.units : null;
+
+  const changeMarket = (next: Market) => {
+    setMarket(next);
+    const example = MARKETS.find((m) => m.value === next)?.example;
+    if (example) {
+      setEntry(example.entry);
+      setStopLoss(example.stopLoss);
+      setTakeProfit(example.takeProfit);
+    }
+    if (next === 'futures' && !contractMultiplier) setContractMultiplier(FUTURES_PRESETS[0].multiplier);
+  };
 
   const applyPreset = (values: Required<CalculatorInitialValues>) => {
     setAccountSize(values.accountSize);
@@ -160,7 +254,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
     )} ${unitPlural}`;
     setSaved((prev) =>
       [
-        { id: `${Date.now()}`, label, input, unit },
+        { id: `${Date.now()}`, label, input, market, lotSize },
         ...prev.filter((item) => item.label !== label),
       ].slice(0, 6),
     );
@@ -173,7 +267,9 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
     setEntry(scenario.input.entry);
     setStopLoss(scenario.input.stopLoss);
     setTakeProfit(scenario.input.takeProfit ?? null);
-    setUnit(scenario.unit);
+    setMarket(scenario.market);
+    setLotSize(scenario.lotSize);
+    if (scenario.input.contractMultiplier) setContractMultiplier(scenario.input.contractMultiplier);
   };
 
   return (
@@ -299,16 +395,16 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
           />
 
           <div>
-            <span className="label mb-2 block">Position Measured In</span>
-            <div className="grid grid-cols-3 gap-1.5 rounded-xl border border-line bg-base-sunken/60 p-1.5">
-              {UNITS.map((option) => (
+            <span className="label mb-2 block">Market</span>
+            <div className="grid grid-cols-2 gap-1.5 rounded-xl border border-line bg-base-sunken/60 p-1.5 sm:grid-cols-4">
+              {MARKETS.map((option) => (
                 <button
                   key={option.value}
                   type="button"
-                  aria-pressed={unit === option.value}
-                  onClick={() => setUnit(option.value)}
+                  aria-pressed={market === option.value}
+                  onClick={() => changeMarket(option.value)}
                   className={`rounded-lg px-2 py-1.5 text-xs transition-all duration-200 ${
-                    unit === option.value
+                    market === option.value
                       ? 'bg-accent-wash text-accent-soft'
                       : 'text-ink-faint hover:bg-white/[0.03] hover:text-ink-muted'
                   }`}
@@ -317,7 +413,51 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                 </button>
               ))}
             </div>
+            <p className="mt-1.5 text-2xs leading-relaxed text-ink-ghost">{marketConfig.note}.</p>
           </div>
+
+          {market === 'futures' && (
+            <NumberField
+              label="Contract Multiplier"
+              value={contractMultiplier}
+              onChange={setContractMultiplier}
+              prefix="$"
+              suffix="/ pt"
+              step={1}
+              min={0}
+              placeholder="50"
+              hint="Dollars of P&L per 1.00 point the contract moves — set by the exchange, not you."
+              adornment={
+                <div className="flex flex-wrap gap-1">
+                  {FUTURES_PRESETS.map((preset) => (
+                    <button
+                      key={preset.symbol}
+                      type="button"
+                      onClick={() => setContractMultiplier(preset.multiplier)}
+                      aria-pressed={contractMultiplier === preset.multiplier}
+                      title={preset.name}
+                      className={`rounded px-1.5 py-0.5 font-mono text-2xs transition-colors ${
+                        contractMultiplier === preset.multiplier
+                          ? 'bg-accent-wash text-accent-soft'
+                          : 'text-ink-ghost hover:bg-white/[0.05] hover:text-ink-muted'
+                      }`}
+                    >
+                      {preset.symbol}
+                    </button>
+                  ))}
+                </div>
+              }
+            />
+          )}
+
+          {market === 'forex' && (
+            <Segmented
+              label="Lot Size"
+              value={lotSize}
+              onChange={setLotSize}
+              options={LOT_SIZES.map((l) => ({ value: l.value, label: l.label }))}
+            />
+          )}
         </div>
 
         <div className="mt-5 border-t border-line pt-4">
@@ -384,17 +524,23 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                 )
               }
               sub={
-                result.valid && result.positionSizeWhole !== result.positionSize
-                  ? `${formatUnits(result.positionSizeWhole)} whole ${unitPlural} risks ${formatCurrency(
-                      result.riskAtWholeUnits,
-                    )}`
-                  : undefined
+                lots !== null
+                  ? `${formatNumber(lots, 3)} ${lotConfig.label.split(' ')[0].toLowerCase()} lot${
+                      Math.abs(lots) === 1 ? '' : 's'
+                    }`
+                  : result.valid && result.positionSizeWhole !== result.positionSize
+                    ? `${formatUnits(result.positionSizeWhole)} whole ${unitPlural} risks ${formatCurrency(
+                        result.riskAtWholeUnits,
+                      )}`
+                    : undefined
               }
             >
               <Explain slug="position-size" termLabel="Position Size">
                 Position size is how much of an asset you buy or sell. It comes from two numbers you
                 already chose: the money you are willing to lose, divided by the distance between
                 your entry and your stop.
+                {market === 'futures' &&
+                  ' For futures, that distance is scaled by the contract multiplier first.'}
               </Explain>
             </Stat>
 
@@ -425,7 +571,10 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
               label={`Risk Per ${unit}`}
               value={
                 result.valid ? (
-                  <AnimatedNumber value={result.riskPerUnit} format={(v) => formatCurrency(v)} />
+                  <AnimatedNumber
+                    value={result.dollarRiskPerUnit}
+                    format={(v) => (v !== null && Math.abs(v) < 1 ? formatPrice(v) : formatCurrency(v))}
+                  />
                 ) : (
                   PLACEHOLDER
                 )
@@ -439,6 +588,8 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
               <Explain slug="stop-distance" termLabel="Stop Distance">
                 The distance between your entry and your stop. Halve it and your position size
                 doubles, while the money you risk stays exactly the same.
+                {market === 'futures' &&
+                  ' Shown here already converted to dollars using the contract multiplier.'}
               </Explain>
             </Stat>
 

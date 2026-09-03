@@ -24,6 +24,11 @@ interface Step {
 function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[] {
   const { accountSize, riskPercent, direction, entry, stopLoss, takeProfit } = input;
   const long = direction === 'long';
+  const multiplier =
+    typeof input.contractMultiplier === 'number' && input.contractMultiplier > 0
+      ? input.contractMultiplier
+      : 1;
+  const hasMultiplier = multiplier !== 1;
 
   const steps: Step[] = [
     {
@@ -33,16 +38,27 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
       slug: 'risk-per-trade',
     },
     {
-      label: `Risk Per ${unit}`,
+      label: `Price Distance`,
       working: long
         ? `${formatCompactPrice(entry)} − ${formatCompactPrice(stopLoss)}`
         : `${formatCompactPrice(stopLoss)} − ${formatCompactPrice(entry)}`,
       result: formatCompactPrice(result.riskPerUnit),
       slug: 'stop-distance',
     },
+  ];
+
+  if (hasMultiplier) {
+    steps.push({
+      label: `Risk Per ${unit}`,
+      working: `${formatCompactPrice(result.riskPerUnit)} × ${formatCurrency(multiplier)}/pt`,
+      result: formatCompactPrice(result.dollarRiskPerUnit),
+    });
+  }
+
+  steps.push(
     {
       label: 'Position Size',
-      working: `${formatCurrency(result.maxRisk)} ÷ ${formatCompactPrice(result.riskPerUnit)}`,
+      working: `${formatCurrency(result.maxRisk)} ÷ ${formatCompactPrice(result.dollarRiskPerUnit)}`,
       result: `${formatUnits(result.positionSize)} ${unit.toLowerCase()}${
         result.positionSize === 1 ? '' : 's'
       }`,
@@ -50,15 +66,17 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
     },
     {
       label: 'Position Value',
-      working: `${formatUnits(result.positionSize)} × ${formatCompactPrice(entry)}`,
+      working: hasMultiplier
+        ? `${formatUnits(result.positionSize)} × ${formatCompactPrice(entry)} × ${formatCurrency(multiplier)}/pt`
+        : `${formatUnits(result.positionSize)} × ${formatCompactPrice(entry)}`,
       result: formatCurrency(result.positionValue),
       slug: 'notional-value',
     },
-  ];
+  );
 
   if (result.rewardPerUnit !== null && takeProfit != null) {
     steps.push({
-      label: `Reward Per ${unit}`,
+      label: 'Reward Distance',
       working: long
         ? `${formatCompactPrice(takeProfit)} − ${formatCompactPrice(entry)}`
         : `${formatCompactPrice(entry)} − ${formatCompactPrice(takeProfit)}`,
@@ -67,7 +85,9 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
     });
     steps.push({
       label: 'Potential Profit',
-      working: `${formatUnits(result.positionSize)} × ${formatCompactPrice(result.rewardPerUnit)}`,
+      working: hasMultiplier
+        ? `${formatUnits(result.positionSize)} × ${formatCompactPrice(result.rewardPerUnit)} × ${formatCurrency(multiplier)}/pt`
+        : `${formatUnits(result.positionSize)} × ${formatCompactPrice(result.rewardPerUnit)}`,
       result: formatCurrency(result.potentialProfit),
     });
     steps.push({

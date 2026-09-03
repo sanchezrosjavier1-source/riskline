@@ -245,6 +245,51 @@ describe('calculateTrade — edge and extreme values', () => {
   });
 });
 
+describe('calculateTrade — contract multiplier (futures)', () => {
+  it('defaults the multiplier to 1 when omitted, matching stock/crypto math exactly', () => {
+    const withMultiplier = calculateTrade({ ...baseLong, contractMultiplier: 1 });
+    const without = calculateTrade(baseLong);
+    expect(withMultiplier).toEqual(without);
+  });
+
+  it('ignores a zero or negative multiplier rather than dividing by it', () => {
+    const zero = calculateTrade({ ...baseLong, contractMultiplier: 0 });
+    const negative = calculateTrade({ ...baseLong, contractMultiplier: -50 });
+    const baseline = calculateTrade(baseLong);
+    expect(zero.positionSize).toBe(baseline.positionSize);
+    expect(negative.positionSize).toBe(baseline.positionSize);
+  });
+
+  it('scales dollar risk per unit by the multiplier, e.g. an ES-style $50/point contract', () => {
+    // 2 points of price risk x $50/point = $100 real risk per contract.
+    const result = calculateTrade({ ...baseLong, contractMultiplier: 50 });
+    expect(result.riskPerUnit).toBe(2); // raw price distance, unaffected
+    expect(result.dollarRiskPerUnit).toBe(100);
+  });
+
+  it('shrinks position size as the multiplier grows, keeping total risk at maxRisk', () => {
+    // $100 max risk / $100 dollar risk per contract = exactly 1 contract.
+    const result = calculateTrade({ ...baseLong, contractMultiplier: 50 });
+    expect(result.positionSize).toBe(1);
+    expect(result.potentialLoss).toBeCloseTo(result.maxRisk, 10);
+  });
+
+  it('scales position value (notional) and potential profit by the multiplier too', () => {
+    const result = calculateTrade({ ...baseLong, contractMultiplier: 50 });
+    // 1 contract x $50 entry x 50 multiplier.
+    expect(result.positionValue).toBe(2500);
+    // 1 contract x 6 points reward x 50 multiplier.
+    expect(result.potentialProfit).toBe(300);
+  });
+
+  it('leaves the risk/reward ratio and break-even win rate unchanged by the multiplier', () => {
+    const noMultiplier = calculateTrade(baseLong);
+    const withMultiplier = calculateTrade({ ...baseLong, contractMultiplier: 50 });
+    expect(withMultiplier.riskRewardRatio).toBe(noMultiplier.riskRewardRatio);
+    expect(withMultiplier.breakEvenWinRate).toBe(noMultiplier.breakEvenWinRate);
+  });
+});
+
 describe('validateTrade', () => {
   it('returns no issues for a clean trade', () => {
     expect(validateTrade(baseLong)).toHaveLength(0);

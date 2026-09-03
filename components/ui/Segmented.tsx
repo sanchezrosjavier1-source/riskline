@@ -35,7 +35,9 @@ export function Segmented<T extends string>({ label, value, options, onChange }:
       <div
         role="radiogroup"
         aria-label={label}
-        className="grid grid-cols-2 gap-1.5 rounded-xl border border-line bg-base-sunken/60 p-1.5"
+        className={`grid gap-1.5 rounded-xl border border-line bg-base-sunken/60 p-1.5 ${
+          options.length >= 3 ? 'grid-cols-3' : 'grid-cols-2'
+        }`}
       >
         {options.map((option) => {
           const active = option.value === value;

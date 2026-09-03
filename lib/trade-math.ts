@@ -42,6 +42,7 @@ export function rewardPerUnitFor(direction: Direction, entry: number, takeProfit
 const EMPTY_RESULT: Omit<TradeResult, 'valid' | 'issues'> = {
   maxRisk: 0,
   riskPerUnit: 0,
+  dollarRiskPerUnit: 0,
   positionSize: 0,
   positionSizeWhole: 0,
   riskAtWholeUnits: 0,
@@ -190,14 +191,23 @@ export function calculateTrade(input: TradeInput): TradeResult {
 
   const { accountSize, riskPercent, direction, entry, stopLoss, takeProfit } = input;
 
+  // Defaults to 1 (stocks, forex, crypto), where one unit of price movement
+  // equals one unit of account currency. Futures contracts multiply P&L per
+  // point, so this is the only place their math actually differs.
+  const multiplier =
+    isFiniteNumber(input.contractMultiplier) && (input.contractMultiplier as number) > 0
+      ? (input.contractMultiplier as number)
+      : 1;
+
   const maxRisk = accountSize * (riskPercent / 100);
   const riskPerUnit = riskPerUnitFor(direction, entry, stopLoss);
+  const dollarRiskPerUnit = riskPerUnit * multiplier;
 
-  const positionSize = safeDivide(maxRisk, riskPerUnit) ?? 0;
+  const positionSize = safeDivide(maxRisk, dollarRiskPerUnit) ?? 0;
   const positionSizeWhole = Math.floor(positionSize);
-  const riskAtWholeUnits = positionSizeWhole * riskPerUnit;
-  const positionValue = positionSize * entry;
-  const potentialLoss = positionSize * riskPerUnit;
+  const riskAtWholeUnits = positionSizeWhole * dollarRiskPerUnit;
+  const positionValue = positionSize * entry * multiplier;
+  const potentialLoss = positionSize * dollarRiskPerUnit;
   const potentialLossPercent = (safeDivide(potentialLoss, accountSize) ?? 0) * 100;
   const accountExposurePercent = (safeDivide(positionValue, accountSize) ?? 0) * 100;
   const stopDistancePercent = (safeDivide(riskPerUnit, entry) ?? 0) * 100;
@@ -213,9 +223,10 @@ export function calculateTrade(input: TradeInput): TradeResult {
 
   if (targetUsable) {
     rewardPerUnit = rewardPerUnitFor(direction, entry, takeProfit as number);
-    potentialProfit = positionSize * rewardPerUnit;
+    potentialProfit = positionSize * rewardPerUnit * multiplier;
     potentialProfitPercent = (safeDivide(potentialProfit, accountSize) ?? 0) * 100;
     targetDistancePercent = (safeDivide(rewardPerUnit, entry) ?? 0) * 100;
+    // Ratio of two raw price distances — the multiplier applies to both sides equally and cancels out.
     riskRewardRatio = safeDivide(rewardPerUnit, riskPerUnit);
     if (riskRewardRatio !== null) {
       breakEvenWinRate = (safeDivide(1, 1 + riskRewardRatio) ?? 0) * 100;
@@ -248,6 +259,7 @@ export function calculateTrade(input: TradeInput): TradeResult {
     issues,
     maxRisk,
     riskPerUnit,
+    dollarRiskPerUnit,
     positionSize,
     positionSizeWhole,
     riskAtWholeUnits,

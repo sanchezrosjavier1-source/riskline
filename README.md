@@ -24,7 +24,7 @@ Then open <http://localhost:3000>.
 | `npm run dev` | Development server with hot reload |
 | `npm run build` | Production build (prerenders all 185 routes) |
 | `npm start` | Serve the production build |
-| `npm test` | Run the test suite (570 tests) |
+| `npm test` | Run the test suite (668 tests) |
 | `npm run typecheck` | Type-check without emitting |
 
 Set `NEXT_PUBLIC_SITE_URL` at deploy time so canonical URLs, Open Graph tags
@@ -35,7 +35,7 @@ and the sitemap point at the real domain. It defaults to `https://stopsize.com`.
 | Route | Rendering | Purpose |
 | --- | --- | --- |
 | `/` | Static | Hero with a live trade builder, the learning loop, tool and dictionary entry points |
-| `/calculator` | Dynamic | Full risk calculator; accepts prefill query params |
+| `/calculator` | Dynamic | Full risk calculator with Stocks/Forex/Futures/Crypto modes; accepts prefill query params |
 | `/tools` | Static | Tool discovery |
 | `/tools/position-size` | Static | Focused position size calculator + how-to content |
 | `/tools/risk-reward` | Static | Risk/reward ratio, break-even win rate, win-rate explorer |
@@ -106,6 +106,16 @@ Two rules hold throughout:
   (advisory — aggressive risk, exposure above 100%, sub-unit position sizes),
   which appear alongside valid results.
 
+The full calculator (`/calculator`) also switches between Stocks, Forex,
+Futures and Crypto. For everything except futures this is a relabeling — the
+position-size math is identical because one unit of price movement equals one
+unit of account currency. Futures genuinely differ: a contract's P&L per point
+is fixed by the exchange (an ES point is worth $50, not $1), so
+`calculateTrade` takes an optional `contractMultiplier` that scales
+`riskPerUnit` into a real dollar figure before position size is derived from
+it — the risk/reward ratio stays untouched since the multiplier cancels out on
+both sides of that division.
+
 The trade ladder is drawn from `ladderGeometry`, the same function family that
 produces the numbers, so the picture cannot disagree with the results.
 
@@ -119,12 +129,14 @@ alias → substring → definition, with popular terms nudged up on ties.
 
 ## Testing
 
-662 tests across seven suites, run with `npm test`:
+668 tests across seven suites, run with `npm test`:
 
 - **`trade-math.test.ts`** — the worked example, long/short symmetry, invalid
   input (zero, negative, `NaN`, `Infinity`, inverted stops and targets), extreme
-  values (sub-penny prices, six-figure instruments), whole-unit rounding, and an
-  assertion that no code path returns a non-finite number.
+  values (sub-penny prices, six-figure instruments), whole-unit rounding, the
+  futures contract multiplier (scales dollar risk without touching the
+  risk/reward ratio), and an assertion that no code path returns a
+  non-finite number.
 - **`dictionary.test.ts`** — every term is complete, slugs are unique and
   URL-safe, every `related` slug resolves, every tool link points at a real
   route, no term is orphaned, and search returns the documented suggestions.
