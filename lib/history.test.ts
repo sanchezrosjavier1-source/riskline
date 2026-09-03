@@ -50,6 +50,34 @@ describe('history corpus', () => {
   });
 });
 
+describe('event charts', () => {
+  const VALID_SHAPES = ['decline', 'spike', 'peg-break', 'v-recovery', 'boom-bust'];
+
+  it('almost every event has a chart — only a genuine mismatch skips one', () => {
+    const withChart = ALL_HISTORY_EVENTS.filter((e) => e.chart).length;
+    expect(withChart).toBeGreaterThanOrEqual(ALL_HISTORY_EVENTS.length - 2);
+  });
+
+  it('every chart uses a known shape with non-empty labels', () => {
+    for (const event of ALL_HISTORY_EVENTS) {
+      if (!event.chart) continue;
+      expect(VALID_SHAPES, event.title).toContain(event.chart.shape);
+      expect(event.chart.startLabel.length, event.title).toBeGreaterThan(0);
+      expect(event.chart.extremeLabel.length, event.title).toBeGreaterThan(0);
+      if (event.chart.endLabel !== undefined) {
+        expect(event.chart.endLabel.length, event.title).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('uses every shape at least once, so the section is not visually repetitive', () => {
+    const usedShapes = new Set(ALL_HISTORY_EVENTS.filter((e) => e.chart).map((e) => e.chart!.shape));
+    for (const shape of VALID_SHAPES) {
+      expect(usedShapes.has(shape as never), `shape "${shape}" is never used`).toBe(true);
+    }
+  });
+});
+
 describe('every event has real depth', () => {
   it.each(ALL_HISTORY_EVENTS.map((e) => [e.title, e] as const))('%s is substantial', (_t, event) => {
     expect(event.dek.length).toBeGreaterThan(30);

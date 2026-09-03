@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Calendar, Lightbulb } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { EventChart } from '@/components/history/EventChart';
 import { AdSlot } from '@/components/layout/AdSlot';
 import {
   getAdjacentHistoryEvents,
@@ -120,6 +121,13 @@ export default async function HistoryEventPage({ params }: PageProps) {
               </div>
             ))}
           </dl>
+
+          {/* --------------------------------------------------------------- chart */}
+          {event.chart && (
+            <div className="mt-6">
+              <EventChart chart={event.chart} />
+            </div>
+          )}
 
           {/* --------------------------------------------------------- what happened */}
           <section aria-labelledby="what-happened" className="mt-10">

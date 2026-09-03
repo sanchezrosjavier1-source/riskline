@@ -14,6 +14,7 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
       { label: 'Lehman Brothers', value: 'Filed the largest bankruptcy in US history' },
       { label: 'Recovery to prior peak', value: 'About 5.5 years' },
     ],
+    chart: { shape: 'decline', startLabel: 'Oct 2007 peak', extremeLabel: '−57% by Mar 2009' },
     body: [
       'Through the mid-2000s, mortgage lending standards loosened substantially in the US, and a large volume of loans were made to borrowers with weak credit. These mortgages were packaged into complex securities and sold to investors worldwide, often repackaged multiple times into instruments that made the underlying risk difficult to assess.',
       'Many financial institutions held these securities using significant leverage, and insured against their default through instruments like credit default swaps — themselves often written by insurers who had not set aside enough capital to cover the risk they were taking on. When US home prices began falling and mortgage defaults rose, the losses moved through this leveraged, interconnected chain far faster and further than the size of the original housing decline alone would suggest.',
@@ -62,6 +63,12 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
       { label: 'Recovery', value: 'Most of the loss reversed the same day' },
       { label: 'Some stocks briefly traded at', value: 'As low as $0.01' },
     ],
+    chart: {
+      shape: 'v-recovery',
+      startLabel: '2:30 PM',
+      extremeLabel: '−9% at 2:47 PM',
+      endLabel: 'Recovered by close',
+    },
     body: [
       'On the afternoon of May 6, 2010, US markets already under pressure from European debt concerns began falling sharply and rapidly. Within about 36 minutes, the Dow Jones Industrial Average dropped roughly 9%, erasing close to a trillion dollars in market value, before recovering the majority of the loss within the same session.',
       'During the worst of the plunge, the automated liquidity that normally keeps markets functioning evaporated. Some large, well-known stocks briefly traded for a single cent, while others spiked to absurdly high prices, as market makers\' systems paused or withdrew rather than trade into conditions their models could not make sense of.',
@@ -86,6 +93,7 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
       { label: 'Countries requiring bailouts', value: 'Greece, Ireland, Portugal, Cyprus' },
       { label: 'Resolution mechanism', value: 'ECB and EU-led bailout programs' },
     ],
+    chart: { shape: 'spike', startLabel: '~4% yield', extremeLabel: '30%+ yield' },
     body: [
       'Government bonds from developed economies are typically treated by markets as close to risk-free — a benchmark other assets are priced against. Starting in 2009, it became clear that Greece\'s government debt and deficits were far larger than previously reported, and the market began questioning whether Greece could repay what it owed.',
       'Because Greece shared a currency with the rest of the eurozone, it could not simply devalue its own currency to ease the burden the way a country with an independent currency might. Yields on Greek bonds — the interest rate the market demanded to hold them — rose dramatically as the perceived risk of default increased, at one point exceeding 30% on 10-year debt.',
@@ -110,6 +118,7 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
       { label: 'Duration', value: '45 minutes' },
       { label: 'Outcome', value: 'Firm required emergency rescue funding, later acquired' },
     ],
+    chart: { shape: 'decline', startLabel: '9:30 AM', extremeLabel: '−$440M by 10:15 AM' },
     body: [
       'Knight Capital was one of the largest market-making firms in the US, handling a significant share of daily US equity trading volume. On August 1, 2012, the firm deployed new trading software to its systems — but old, unused testing code was accidentally left active on one of the servers being updated.',
       'When markets opened, that old code began executing a rapid, unintended stream of erroneous orders across around 150 stocks, buying high and selling low repeatedly in a pattern that made no economic sense. It took Knight\'s engineers 45 minutes to identify the problem and shut the system down — by which point the firm had accumulated a loss of roughly $440 million, more than its entire net worth.',

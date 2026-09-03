@@ -14,6 +14,7 @@ export const mid2010sEvents: HistoryEvent[] = [
       { label: 'Warning given', value: 'None' },
       { label: 'Broker impact', value: 'Several forced into insolvency or large losses' },
     ],
+    chart: { shape: 'peg-break', startLabel: '1.20 floor held', extremeLabel: 'CHF +30% in minutes' },
     body: [
       'Since 2011, the Swiss National Bank (SNB) had maintained a floor under the EUR/CHF exchange rate, committing to buy unlimited euros to prevent the Swiss franc from strengthening past a set level. Years of consistent defense of that floor led much of the market to treat it as a near-permanent fact, and many traders held leveraged positions built on the assumption it would hold.',
       'On January 15, 2015, with no advance warning, the SNB abandoned the cap entirely. The franc surged against the euro by as much as 30% within minutes — a move that, for most currency pairs, would be considered enormous over the course of an entire year, not a few minutes.',
@@ -38,6 +39,7 @@ export const mid2010sEvents: HistoryEvent[] = [
       { label: 'Trigger thresholds', value: '5% and 7% index moves' },
       { label: 'Notable effect', value: 'A 7% morning drop closed the market for the day, twice' },
     ],
+    chart: { shape: 'decline', startLabel: 'Market open', extremeLabel: '−7%, trading halted' },
     body: [
       'Following a sharp market decline in the summer of 2015, Chinese regulators introduced a new circuit breaker system for the CSI 300 index, intended to reduce volatility: a 5% move would trigger a 15-minute trading pause, and a 7% move would halt trading for the remainder of the day.',
       'The mechanism went live on January 4, 2016. On that day and again on January 7, the market fell fast enough to trigger the 7% threshold and close entirely — on January 7, trading lasted less than 30 minutes before the full-day halt kicked in.',
@@ -62,6 +64,11 @@ export const mid2010sEvents: HistoryEvent[] = [
       { label: '31-year low reached', value: 'Yes, briefly' },
       { label: 'Result vs. market expectation', value: 'Markets were positioned for "Remain"' },
     ],
+    chart: {
+      shape: 'peg-break',
+      startLabel: "Priced for 'Remain'",
+      extremeLabel: 'GBP −8% overnight',
+    },
     body: [
       'On June 23, 2016, the UK held a referendum on whether to remain in the European Union. Polling and betting markets leading into the vote suggested "Remain" was the more likely outcome, and currency markets were broadly positioned accordingly, with the pound having strengthened in the days before the vote.',
       'As results came in overnight and it became clear "Leave" had won, the pound collapsed against the dollar, falling more than 8% within hours to levels not seen in over three decades — one of the sharpest moves ever recorded in a G10 currency pair outside of a currency crisis.',
@@ -86,6 +93,7 @@ export const mid2010sEvents: HistoryEvent[] = [
       { label: 'VIX (volatility index) spike', value: 'More than doubled intraday' },
       { label: 'Fund outcome', value: 'Liquidated shortly after' },
     ],
+    chart: { shape: 'decline', startLabel: 'Feb 2, 2018', extremeLabel: 'XIV −96% by Feb 6' },
     body: [
       'In the years leading up to 2018, several exchange-traded products let investors bet that market volatility would stay low, effectively earning a steady return during calm periods. These products had grown popular and large, having delivered smooth gains for an extended stretch of low-volatility markets.',
       'On February 5, 2018, US markets fell sharply, and the volatility index (VIX) that these products were tied to spiked dramatically in a single session — more than doubling. Because the products were structured with leverage and needed to rebalance their exposure daily based on the prior day\'s move, the spike triggered forced buying of volatility-linked futures into an already fast-moving market, which pushed volatility even higher.',
@@ -110,6 +118,12 @@ export const mid2010sEvents: HistoryEvent[] = [
       { label: '2018 decline from peak', value: 'More than 80%' },
       { label: 'Time to reclaim 2017 peak', value: 'About 3 years' },
     ],
+    chart: {
+      shape: 'boom-bust',
+      startLabel: '~$1,000',
+      extremeLabel: '~$19,700',
+      endLabel: '−80%+ by end of 2018',
+    },
     body: [
       'Bitcoin began 2017 trading around $1,000 and, driven by a wave of mainstream and retail attention, rose to nearly $20,000 by December — a gain of roughly 20 times in under twelve months. Media coverage, the launch of Bitcoin futures on major exchanges, and a broader "ICO" boom in newly created cryptocurrencies fed the enthusiasm.',
       'Much of the buying in the final months of the rally showed classic signs of speculative mania rather than considered investment: people entering because the price was rising and the fear of missing out outweighed any analysis of value, often using leverage on unregulated exchanges to amplify the bet further.',
