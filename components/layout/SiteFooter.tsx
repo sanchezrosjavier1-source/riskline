@@ -48,8 +48,8 @@ export function SiteFooter() {
                 </FooterLink>
               ))}
               <FooterLink href="/markets">Markets</FooterLink>
+              <FooterLink href="/news">Market News</FooterLink>
               <FooterLink href="/journal">Trading Journal</FooterLink>
-              <FooterLink href="/tools">All tools</FooterLink>
               <FooterLink href="/learn">Test Yourself</FooterLink>
             </FooterColumn>
 
