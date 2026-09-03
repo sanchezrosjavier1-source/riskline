@@ -7,6 +7,9 @@ import { Logo } from './Logo';
 
 const TOOL_LINKS = [
   { href: '/calculator', label: 'Risk Calculator' },
+  { href: '/calculator/forex', label: 'Forex Position Size Calculator' },
+  { href: '/calculator/futures', label: 'Futures Position Size Calculator' },
+  { href: '/calculator/crypto', label: 'Crypto Position Size Calculator' },
   { href: '/tools/position-size', label: 'Position Size Calculator' },
   { href: '/tools/risk-reward', label: 'Risk/Reward Calculator' },
   { href: '/tools', label: 'All tools' },

@@ -3,6 +3,7 @@ import { getAllSlugs } from '@/lib/dictionary';
 import { getAllGuideSlugs } from '@/lib/guides';
 import { getAllHistorySlugs } from '@/lib/history';
 import { allAssetIds } from '@/lib/markets';
+import { getAllMarketCalculatorSlugs } from '@/data/market-calculators';
 import { SITE } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -69,6 +70,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
+  // Market-specific calculators carry the highest-intent search terms.
+  const marketCalculatorRoutes: MetadataRoute.Sitemap = getAllMarketCalculatorSlugs().map((slug) => ({
+    url: `${SITE.url}/calculator/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.95,
+  }));
+
   const assetRoutes: MetadataRoute.Sitemap = allAssetIds().map((id) => ({
     url: `${SITE.url}/markets/${id}`,
     lastModified: now,
@@ -76,5 +85,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...termRoutes, ...guideRoutes, ...historyRoutes, ...assetRoutes];
+  return [
+    ...staticRoutes,
+    ...marketCalculatorRoutes,
+    ...termRoutes,
+    ...guideRoutes,
+    ...historyRoutes,
+    ...assetRoutes,
+  ];
 }
