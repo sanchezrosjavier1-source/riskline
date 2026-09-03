@@ -2,13 +2,23 @@
 
 **Know the trade. Know the risk.**
 
-An interactive trading education platform: a professional risk calculator, a
-135-term trading dictionary, six long-form guides, 24 landmark market events,
-and an FAQ — built as one connected product. Every calculated result links to
-the concept behind it, and most concepts carry a working calculator inside
-the explanation.
+A trading risk-management platform, organised into four sections so a
+first-time visitor never has to choose between a dozen links:
 
-The loop the product is built around: **learn → understand → calculate → explore.**
+| Section | What lives there |
+| --- | --- |
+| **Calculate** | Risk calculator (stocks, forex, futures, crypto) and two focused tools |
+| **Markets** | Live crypto prices and official ECB forex rates, each one click from being sized |
+| **Journal** | Trade log and performance dashboard — no account, stored on the device |
+| **Learn** | 135-term dictionary, six guides, 24 market events, FAQ and a knowledge check |
+
+The principle behind the interface is **simple on the surface, powerful
+underneath**. The calculator opens with four inputs and one answer; markets,
+contract multipliers, targets and the other fourteen metrics are one
+disclosure away rather than on screen by default.
+
+The loop the product is built around: **learn → understand → calculate →
+journal.**
 
 ## Getting started
 
@@ -22,9 +32,9 @@ Then open <http://localhost:3000>.
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Development server with hot reload |
-| `npm run build` | Production build (prerenders all 185 routes) |
+| `npm run build` | Production build (prerenders 187 routes) |
 | `npm start` | Serve the production build |
-| `npm test` | Run the test suite (668 tests) |
+| `npm test` | Run the test suite (720 tests) |
 | `npm run typecheck` | Type-check without emitting |
 
 Set `NEXT_PUBLIC_SITE_URL` at deploy time so canonical URLs, Open Graph tags
@@ -36,6 +46,8 @@ and the sitemap point at the real domain. It defaults to `https://stopsize.com`.
 | --- | --- | --- |
 | `/` | Static | Hero with a live trade builder, the learning loop, tool and dictionary entry points |
 | `/calculator` | Dynamic | Full risk calculator with Stocks/Forex/Futures/Crypto modes; accepts prefill query params |
+| `/markets` | ISR (60s) | Live crypto + ECB forex rates, searchable, each row links into the calculator |
+| `/journal` | Static shell | Trade log, filters and performance dashboard; data lives in the browser |
 | `/tools` | Static | Tool discovery |
 | `/tools/position-size` | Static | Focused position size calculator + how-to content |
 | `/tools/risk-reward` | Static | Risk/reward ratio, break-even win rate, win-rate explorer |
@@ -53,8 +65,40 @@ and the sitemap point at the real domain. It defaults to `https://stopsize.com`.
 | `/contact` | Static | Contact email |
 | `/sitemap.xml`, `/robots.txt` | Static | Generated from the term and guide data |
 
-`/calculator` accepts `?account=&risk=&direction=&entry=&stop=&tp=` so the
-homepage hero and dictionary pages can hand a trade straight into the tool.
+`/calculator` accepts `?account=&risk=&direction=&entry=&stop=&tp=&market=` so
+the homepage hero, dictionary pages and the markets table can hand a trade
+straight into the tool. Arriving with a price but no stop seeds a visible
+2%-away placeholder rather than opening on a validation error.
+
+## Market data
+
+Two sources, both keyless and publicly redistributable, so the project needs no
+API keys or accounts:
+
+| Asset class | Source | Freshness |
+| --- | --- | --- |
+| Crypto | CoinGecko public API | Revalidated once a minute |
+| Forex | Frankfurter, serving ECB reference rates | One publication per business day |
+
+Real-time **equity** prices are deliberately absent. Redistributing them on a
+public, ad-supported page requires an exchange display licence that no free
+tier grants, so the page shows nothing rather than something mislabelled, and
+says so. Every quote carries its own source and freshness label.
+
+Next's fetch cache means one upstream request serves every visitor for the
+revalidation window, so traffic does not scale API usage.
+
+## The journal has no backend
+
+Trades are stored in the browser's own `localStorage`. That is a deliberate
+architectural choice, not a shortcut: it means the journal works on the first
+visit with no sign-up, no database and no personal data leaving the device.
+Accounts, when they arrive, become a **sync** feature layered on top rather
+than a gate in front.
+
+Storage is treated as untrusted input — `parseTrades` drops anything that does
+not look like a trade instead of letting it poison the statistics — and CSV
+export exists so the data is never hostage to one browser profile.
 
 ## Architecture
 
@@ -62,6 +106,8 @@ homepage hero and dictionary pages can hand a trade straight into the tool.
 app/                     Routes, metadata, structured data
 components/
   calculator/            TradeLadder, RiskCalculator, tools, MathBreakdown
+  markets/               Searchable quote table
+  journal/               Trade form, list, performance dashboard
   dictionary/            Explorer, search dialog, embedded mini-tools
   diagrams/              Hand-tuned SVG explainers
   quiz/                  Knowledge check
@@ -81,6 +127,8 @@ lib/
   dictionary.ts          Lookup, relations, navigation
   guides.ts              Same pattern as dictionary.ts, for guides
   history.ts             Same pattern again, for market history
+  markets.ts             Quote fetching, plus pure pair/change/sort logic
+  journal.ts             Trade statistics, grouping, filtering, CSV export
   search.ts              Ranked search over a lightweight index
   palette.ts             Color source of truth (Tailwind reads this)
   seo.ts                 Title and description builders
@@ -129,7 +177,7 @@ alias → substring → definition, with popular terms nudged up on ties.
 
 ## Testing
 
-668 tests across seven suites, run with `npm test`:
+720 tests across nine suites, run with `npm test`:
 
 - **`trade-math.test.ts`** — the worked example, long/short symmetry, invalid
   input (zero, negative, `NaN`, `Infinity`, inverted stops and targets), extreme
@@ -150,6 +198,15 @@ alias → substring → definition, with popular terms nudged up on ties.
   minimum depth, every related term resolves, no lesson is worded as a
   guarantee of future results, and every event has a real photo with
   descriptive alt text unique to that event.
+- **`markets.test.ts`** — forex pairs derived correctly from USD-based ECB
+  rates (including inverted and cross rates), missing or zero rates returning
+  `null` rather than a wrong price, percent change never producing `Infinity`,
+  and the screener's sorting and filtering.
+- **`journal.test.ts`** — R multiples, equity curves that ignore open trades,
+  peak-to-trough drawdown, and the cases where a `0` would lie: no closed
+  trades yields `null` rather than a 0% win rate, and profit factor is
+  undefined rather than infinite when there are no losses. Also covers corrupt
+  storage being dropped and CSV escaping.
 - **`seo.test.ts`** — every generated title and meta description fits inside
   search-result truncation limits.
 - **`palette.test.ts`** — every text color clears WCAG AA (4.5:1) against every
