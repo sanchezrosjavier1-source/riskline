@@ -14,7 +14,6 @@ export const recentEvents: HistoryEvent[] = [
       { label: 'Reported short interest before the squeeze', value: 'Over 100% of shares outstanding' },
       { label: 'Best-known fund loss (Melvin Capital)', value: 'Reported over 50% for the month' },
     ],
-    chart: { shape: 'spike', startLabel: 'Under $20', extremeLabel: '$480+ intraday' },
     body: [
       'Heading into January 2021, GameStop was a struggling video game retailer that a large number of hedge funds had bet against by short selling — so many, in fact, that reported short interest exceeded 100% of the company\'s available shares, an unusually crowded and, in hindsight, precarious position for the short sellers.',
       'A large, organized community of retail traders, coordinating largely through the Reddit forum r/WallStreetBets, identified this crowded short position and began buying the stock and call options in large numbers, driving the price higher. As the price rose, funds holding short positions faced mounting losses and were forced to buy shares to close out their positions and limit further damage — buying that pushed the price higher still, forcing more short covering in a self-reinforcing loop known as a short squeeze.',
@@ -39,7 +38,6 @@ export const recentEvents: HistoryEvent[] = [
       { label: 'Bank losses (combined, reported)', value: '$10 billion+' },
       { label: 'Time to unwind', value: 'Days' },
     ],
-    chart: { shape: 'decline', startLabel: 'Positions near peak', extremeLabel: 'Unwound within days' },
     body: [
       'Archegos Capital Management was a family office (a private investment firm managing one individual\'s wealth) run by Bill Hwang, who built extremely large, concentrated positions in a small number of stocks. Rather than holding shares directly, Archegos used a derivative called a total return swap, arranged separately through multiple different banks, which allowed it to gain the economic exposure of owning the stock with far less capital and, crucially, without any single bank seeing the full picture of its total position across all of them.',
       'When several of Archegos\'s concentrated holdings fell sharply in March 2021, the fund faced margin calls it could not meet. Because its exposure was spread across several banks who each only knew their own piece of it, no single institution had the full picture of how large and fragile the total position really was until it started to unwind.',
@@ -64,7 +62,6 @@ export const recentEvents: HistoryEvent[] = [
       { label: 'Time from depeg to near-zero', value: 'About one week' },
       { label: 'Peg mechanism', value: 'Algorithmic, not backed by cash reserves' },
     ],
-    chart: { shape: 'decline', startLabel: 'UST = $1.00', extremeLabel: 'Near $0 within a week' },
     body: [
       'TerraUSD (UST) was a "stablecoin" — a crypto asset intended to always be worth $1 — but unlike stablecoins backed by cash or cash-equivalent reserves, its peg was maintained algorithmically through a relationship with a second token, LUNA. In simplified terms, users could always trade $1 of UST for $1 worth of newly created LUNA and vice versa, a mechanism intended to arbitrage the price back to the peg automatically.',
       'In May 2022, a large sale of UST pushed it slightly below its $1 peg. As traders tried to exit, the mechanism that was supposed to restore the peg instead required minting enormous quantities of LUNA to absorb the selling, which collapsed LUNA\'s own price — which in turn undermined confidence in the mechanism defending UST\'s peg, in a rapidly accelerating feedback loop.',
@@ -89,7 +86,6 @@ export const recentEvents: HistoryEvent[] = [
       { label: 'Time from first reports to bankruptcy', value: 'About one week' },
       { label: 'Outcome', value: 'Founder later convicted of fraud' },
     ],
-    chart: { shape: 'decline', startLabel: '~$32B valuation', extremeLabel: 'Bankrupt within a week' },
     body: [
       'FTX was, at its peak, one of the largest cryptocurrency exchanges in the world by trading volume, backed by prominent investors and widely marketed as a trustworthy, well-capitalized platform. Customers deposited cryptocurrency and cash onto the platform to trade, generally trusting that their funds were held safely and separately from the exchange\'s own business operations, as is standard practice at reputable financial institutions.',
       'In November 2022, reporting revealed that a large portion of customer funds had, in fact, been transferred to Alameda Research, a separate trading firm founded by the same individual, and used to cover Alameda\'s trading losses and fund other expenses — leaving FTX unable to return customer deposits on request.',
@@ -114,7 +110,6 @@ export const recentEvents: HistoryEvent[] = [
       { label: 'Bank of England response', value: 'Emergency bond-buying program' },
       { label: 'Time from budget to intervention', value: 'About 3 days' },
     ],
-    chart: { shape: 'spike', startLabel: 'Pre-budget yield', extremeLabel: 'Sharpest spike in decades' },
     body: [
       'In September 2022, the UK government announced a package of large, unfunded tax cuts. Markets reacted by selling UK government bonds (known as gilts) sharply, pushing yields up at a pace rarely seen in developed government bond markets, which are usually among the most stable assets in the financial system.',
       'The speed of the move exposed a hidden vulnerability in UK pension funds, many of which used a strategy called Liability-Driven Investment (LDI), involving leveraged derivative positions to manage their long-term obligations. As gilt yields spiked, these funds faced margin calls and needed to raise cash quickly — often by selling more gilts, which pushed yields higher still, in a feedback loop threatening to spiral out of control within the space of days.',

@@ -14,7 +14,6 @@ export const earlyCrashesEvents: HistoryEvent[] = [
       { label: 'Index', value: 'Dow Jones Industrial Average' },
       { label: 'Time to recover', value: 'About 2 years' },
     ],
-    chart: { shape: 'decline', startLabel: 'Oct 16', extremeLabel: '−22.6% in 1 day' },
     body: [
       'On October 19, 1987, the Dow Jones Industrial Average fell 508 points — 22.6% of its value — in a single session. Markets around the world followed within hours, with Hong Kong, Australia, the UK and other major exchanges posting double-digit losses of their own.',
       'There was no single headline behind it. Investigators later pointed to a combination of overvaluation after a strong multi-year rally, rising interest rates, and — critically — a new practice called portfolio insurance, where large institutions used computer-driven programs to automatically sell stock index futures as prices fell, intended to protect their portfolios.',
@@ -38,7 +37,6 @@ export const earlyCrashesEvents: HistoryEvent[] = [
       { label: 'Soros fund profit (reported)', value: '~$1 billion' },
       { label: 'Outcome', value: 'UK exits the ERM within hours' },
     ],
-    chart: { shape: 'peg-break', startLabel: 'Peg to the mark', extremeLabel: 'Forced out of the ERM' },
     body: [
       'The UK had pegged the pound to the German mark within a fixed band under the European Exchange Rate Mechanism (ERM). By September 1992, most traders believed that peg was unsustainable — the UK\'s interest rates and economic conditions did not match what the peg required, and the pound was, in the market\'s view, overvalued.',
       'Currency speculators, most famously George Soros\'s fund, built enormous short positions against the pound — betting it would be devalued or forced out of the band. The Bank of England tried to defend the peg by buying pounds and raising interest rates twice in a single day, from 10% to 15%, in a last attempt to make holding the currency attractive.',
@@ -63,7 +61,6 @@ export const earlyCrashesEvents: HistoryEvent[] = [
       { label: 'Losses', value: '$4.6 billion in under 4 months' },
       { label: 'Resolution', value: '$3.6B bailout by 14 banks, coordinated by the Fed' },
     ],
-    chart: { shape: 'decline', startLabel: 'Aug 1998', extremeLabel: '−$4.6B in weeks' },
     body: [
       'Long-Term Capital Management was a hedge fund founded in 1994, staffed with elite traders and two Nobel Prize-winning economists. Its strategy relied on sophisticated statistical models identifying small, reliable pricing gaps between related securities — and using very high leverage to turn those small gaps into large returns.',
       'The models assumed that historical relationships between markets would hold, or at worst, revert gradually. In 1998, Russia defaulted on its debt, and global markets reacted in ways the models had not anticipated — volatility spiked and the statistical relationships LTCM relied on broke down simultaneously, across nearly every position the fund held at once.',
@@ -88,7 +85,6 @@ export const earlyCrashesEvents: HistoryEvent[] = [
       { label: 'Duration of decline', value: 'About 2.5 years' },
       { label: 'Recovery to prior peak', value: 'About 15 years' },
     ],
-    chart: { shape: 'decline', startLabel: 'Mar 2000 peak', extremeLabel: '−78% by Oct 2002' },
     body: [
       'Through the late 1990s, the rise of the internet drove enormous speculative investment into any company associated with it. Many of these companies had little or no revenue, and some had no clear plan to ever generate profit — the market was pricing them on growth narratives and user counts rather than earnings.',
       'The Nasdaq Composite, heavy with technology stocks, rose roughly fivefold between 1995 and its peak in March 2000. Starting that month, sentiment reversed. Companies that had been valued in the billions on projected future growth began reporting the losses and cash burn that had been there all along, and the market began pricing that reality in.',
@@ -113,7 +109,6 @@ export const earlyCrashesEvents: HistoryEvent[] = [
       { label: 'Time from scandal to bankruptcy', value: 'About 6 weeks' },
       { label: 'Employee retirement losses', value: 'Estimated at $1B+' },
     ],
-    chart: { shape: 'decline', startLabel: '~$90/share', extremeLabel: 'Under $1' },
     body: [
       'Enron was an energy trading company that, through the late 1990s, was celebrated as one of the most innovative firms in America. In October 2001, it was revealed that the company had used complex off-the-books accounting structures to hide billions of dollars in debt and inflate its reported earnings for years.',
       'Confidence collapsed almost immediately. The stock, which had traded above $90 a year earlier, fell below $1 within weeks, and the company filed for what was then the largest bankruptcy in US history. Its auditor, Arthur Andersen, also collapsed as a result of the scandal.',

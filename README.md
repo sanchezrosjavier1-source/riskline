@@ -24,7 +24,7 @@ Then open <http://localhost:3000>.
 | `npm run dev` | Development server with hot reload |
 | `npm run build` | Production build (prerenders all 181 routes) |
 | `npm start` | Serve the production build |
-| `npm test` | Run the test suite (650 tests) |
+| `npm test` | Run the test suite (570 tests) |
 | `npm run typecheck` | Type-check without emitting |
 
 Set `NEXT_PUBLIC_SITE_URL` at deploy time so canonical URLs, Open Graph tags
@@ -119,7 +119,7 @@ alias → substring → definition, with popular terms nudged up on ties.
 
 ## Testing
 
-650 tests across seven suites, run with `npm test`:
+647 tests across seven suites, run with `npm test`:
 
 - **`trade-math.test.ts`** — the worked example, long/short symmetry, invalid
   input (zero, negative, `NaN`, `Infinity`, inverted stops and targets), extreme
@@ -135,9 +135,8 @@ alias → substring → definition, with popular terms nudged up on ties.
   resolves to a real term, guide, or static route.
 - **`history.test.ts`** — exactly 20 events, sorted chronologically, spanning a
   real range of years and categories, every fact/body/lesson paragraph meets a
-  minimum depth, every related term resolves, no lesson is worded as a
-  guarantee of future results, and 19 of the 20 events carry an illustrative
-  price-shape chart drawn from a fixed set of five shapes.
+  minimum depth, every related term resolves, and no lesson is worded as a
+  guarantee of future results.
 - **`seo.test.ts`** — every generated title and meta description fits inside
   search-result truncation limits.
 - **`palette.test.ts`** — every text color clears WCAG AA (4.5:1) against every
