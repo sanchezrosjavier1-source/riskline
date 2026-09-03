@@ -15,13 +15,16 @@ export const SITE = {
   locale: 'en_US',
 } as const;
 
+/**
+ * Four sections, deliberately. Everything the product does belongs to one of
+ * them, so a first-time visitor never has to choose between a dozen links to
+ * find the thing they came for.
+ */
 export const NAV_LINKS = [
-  { href: '/calculator', label: 'Risk Calculator' },
+  { href: '/calculator', label: 'Calculate' },
+  { href: '/markets', label: 'Markets' },
   { href: '/tools', label: 'Tools' },
-  { href: '/trading-dictionary', label: 'Dictionary' },
-  { href: '/guides', label: 'Guides' },
-  { href: '/market-history', label: 'History' },
-  { href: '/learn', label: 'Test Yourself' },
+  { href: '/trading-dictionary', label: 'Learn' },
 ] as const;
 
 export const DISCLAIMER =

@@ -39,9 +39,16 @@ export interface CalculatorInitialValues {
   entry?: number;
   stopLoss?: number;
   takeProfit?: number | null;
+  /** Set by "Size a trade" links from /markets so units match the instrument. */
+  market?: Market;
 }
 
-const DEFAULTS: Required<Omit<CalculatorInitialValues, 'takeProfit'>> & { takeProfit: number | null } =
+/** The price fields a preset controls. Market is chosen separately, not by a preset. */
+type PresetValues = Required<Omit<CalculatorInitialValues, 'takeProfit' | 'market'>> & {
+  takeProfit: number | null;
+};
+
+const DEFAULTS: PresetValues =
   {
     accountSize: 10000,
     riskPercent: 1,
@@ -135,7 +142,7 @@ function priceLabel(value: number | null | undefined): string {
   return Math.abs(value) < 1 ? formatPrice(value) : formatCurrency(value);
 }
 
-const PRESETS: Array<{ name: string; note: string; values: Required<CalculatorInitialValues> }> = [
+const PRESETS: Array<{ name: string; note: string; values: PresetValues }> = [
   {
     name: 'Stock swing',
     note: '$10k account, 1% risk, long',
@@ -195,7 +202,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
   const [takeProfit, setTakeProfit] = useState<number | null>(
     initial?.takeProfit === undefined ? DEFAULTS.takeProfit : initial.takeProfit,
   );
-  const [market, setMarket] = useState<Market>('stocks');
+  const [market, setMarket] = useState<Market>(initial?.market ?? 'stocks');
   const [contractMultiplier, setContractMultiplier] = useState<number | null>(
     FUTURES_PRESETS[0].multiplier,
   );
@@ -203,7 +210,9 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
   // Progressive disclosure: a first-time user should see four inputs and one
   // answer. Everything that only matters once you know what you're doing —
   // targets, instrument type, contract specs — stays folded away until asked for.
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(
+    Boolean(initial?.market && initial.market !== 'stocks'),
+  );
   const [showAllMetrics, setShowAllMetrics] = useState(false);
   const [saved, setSaved] = useSessionState<SavedScenario[]>('riskline:scenarios', []);
 
@@ -259,7 +268,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
     if (next === 'futures' && !contractMultiplier) setContractMultiplier(FUTURES_PRESETS[0].multiplier);
   };
 
-  const applyPreset = (values: Required<CalculatorInitialValues>) => {
+  const applyPreset = (values: PresetValues) => {
     setAccountSize(values.accountSize);
     setRiskPercent(values.riskPercent);
     setDirection(values.direction);
@@ -301,7 +310,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
           <h2 className="text-sm font-medium text-ink">Your trade</h2>
           <button
             type="button"
-            onClick={() => applyPreset(DEFAULTS as Required<CalculatorInitialValues>)}
+            onClick={() => applyPreset(DEFAULTS)}
             className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-2xs text-ink-ghost transition-colors hover:bg-white/[0.04] hover:text-ink-muted"
           >
             <RotateCcw size={11} aria-hidden />

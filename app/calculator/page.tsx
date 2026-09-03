@@ -3,7 +3,7 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { RiskCalculator, type CalculatorInitialValues } from '@/components/calculator/RiskCalculator';
 import { AdSlot } from '@/components/layout/AdSlot';
 import { DISCLAIMER, SITE, absoluteUrl } from '@/lib/site';
-import type { Direction } from '@/types/trade';
+import type { Direction, Market } from '@/types/trade';
 
 export const metadata: Metadata = {
   title: 'Trading Risk Calculator — Position Size, Risk & Reward',
@@ -30,10 +30,18 @@ function readNumber(value: string | string[] | undefined): number | undefined {
   return parsed;
 }
 
+const MARKETS: Market[] = ['stocks', 'forex', 'futures', 'crypto'];
+
+/** Reads a market from the query string — set by "Size a trade" links on /markets. */
+function readMarket(value: string | string[] | undefined): Market | undefined {
+  if (typeof value !== 'string') return undefined;
+  return MARKETS.find((market) => market === value);
+}
+
 export default async function CalculatorPage({ searchParams }: PageProps) {
   const params = await searchParams;
 
-  // Links from the hero and dictionary can prefill the form.
+  // Links from the hero, the dictionary and the markets page can prefill the form.
   const initial: CalculatorInitialValues = {
     accountSize: readNumber(params.account),
     riskPercent: readNumber(params.risk),
@@ -41,7 +49,17 @@ export default async function CalculatorPage({ searchParams }: PageProps) {
     entry: readNumber(params.entry),
     stopLoss: readNumber(params.stop),
     takeProfit: readNumber(params.tp),
+    market: readMarket(params.market),
   };
+
+  // Arriving from /markets gives us a price but no plan. Rather than opening on
+  // a red "enter a stop" error, seed a visible 2%-away placeholder the trader is
+  // expected to replace — the stop is their decision, not ours.
+  if (initial.entry !== undefined && initial.stopLoss === undefined) {
+    const away = initial.direction === 'short' ? 1.02 : 0.98;
+    initial.stopLoss = Number((initial.entry * away).toPrecision(8));
+    initial.takeProfit = initial.takeProfit ?? null;
+  }
 
   const hasPrefill = Object.values(initial).some((value) => value !== undefined);
 

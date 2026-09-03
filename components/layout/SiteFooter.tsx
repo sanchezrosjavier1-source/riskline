@@ -47,6 +47,7 @@ export function SiteFooter() {
                   {link.label}
                 </FooterLink>
               ))}
+              <FooterLink href="/markets">Markets</FooterLink>
               <FooterLink href="/learn">Test Yourself</FooterLink>
             </FooterColumn>
 
@@ -56,6 +57,7 @@ export function SiteFooter() {
                   {guide.title}
                 </FooterLink>
               ))}
+              <FooterLink href="/guides">All guides</FooterLink>
             </FooterColumn>
 
             <FooterColumn title="Market History">
