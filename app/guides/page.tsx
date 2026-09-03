@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight, Clock } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -7,9 +8,8 @@ import { ALL_GUIDES, getReadingMinutes } from '@/lib/guides';
 import { SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Trading Guides — In-Depth, Practical Reads',
-  description:
-    'Long-form guides on position sizing, risk/reward, leverage, drawdown and more — each one worked through with real numbers and a live calculator.',
+  title: PAGE_SEO.guides.title,
+  description: PAGE_SEO.guides.description,
   alternates: { canonical: '/guides' },
   openGraph: {
     title: `Trading Guides — ${SITE.name}`,

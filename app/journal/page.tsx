@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -7,9 +8,8 @@ import { AdSlot } from '@/components/layout/AdSlot';
 import { DISCLAIMER, SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Free Trading Journal — Track Trades, R Multiples & Drawdown',
-  description:
-    'A free trading journal that needs no account. Log trades, then see your win rate, average R, profit factor, expectancy and drawdown. Everything stays on your device.',
+  title: PAGE_SEO.journal.title,
+  description: PAGE_SEO.journal.description,
   alternates: { canonical: '/journal' },
   openGraph: {
     title: `Trading Journal — ${SITE.name}`,

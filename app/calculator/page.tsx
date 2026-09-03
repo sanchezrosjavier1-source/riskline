@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { RiskCalculator, type CalculatorInitialValues } from '@/components/calculator/RiskCalculator';
 import { AdSlot } from '@/components/layout/AdSlot';
@@ -6,9 +7,8 @@ import { DISCLAIMER, SITE, absoluteUrl } from '@/lib/site';
 import type { Direction, Market } from '@/types/trade';
 
 export const metadata: Metadata = {
-  title: 'Trading Risk Calculator — Position Size, Risk & Reward',
-  description:
-    'Free trading risk calculator. Enter account size, risk %, entry and stop to get position size, exposure, profit, loss and risk/reward — with the math shown.',
+  title: PAGE_SEO.calculator.title,
+  description: PAGE_SEO.calculator.description,
   alternates: { canonical: '/calculator' },
   openGraph: {
     title: `Trading Risk Calculator — ${SITE.name}`,

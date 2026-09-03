@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -7,9 +8,8 @@ import { FAQ_GROUPS } from '@/data/faq';
 import { SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions',
-  description:
-    'Answers about the risk calculator, the trading dictionary, your data and privacy, and the concepts behind position sizing and risk management.',
+  title: PAGE_SEO.faq.title,
+  description: PAGE_SEO.faq.description,
   alternates: { canonical: '/faq' },
   openGraph: {
     title: `Frequently Asked Questions — ${SITE.name}`,

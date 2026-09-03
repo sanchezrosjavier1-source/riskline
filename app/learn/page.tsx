@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -8,8 +9,8 @@ import { getTerm } from '@/lib/dictionary';
 import { DISCLAIMER, SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Test Yourself — Trading Risk Knowledge Check',
-  description: `${QUIZ.length} short questions on position sizing, risk/reward, drawdown and leverage. Every answer comes with the reasoning behind it.`,
+  title: PAGE_SEO.learn.title,
+  description: PAGE_SEO.learn.description,
   alternates: { canonical: '/learn' },
   openGraph: {
     title: `Test Yourself — ${SITE.name}`,

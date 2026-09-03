@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight, Calculator, Compass, Gauge, Scale, Target } from 'lucide-react';
 import { HeroTradeBuilder } from '@/components/calculator/HeroTradeBuilder';
@@ -9,9 +10,8 @@ import { ALL_HISTORY_EVENTS } from '@/lib/history';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Know Your Risk Before You Trade — Position Size Calculator',
-  description:
-    'Work out your position size and risk in seconds, track your trades, and learn what every number means. Free, and nothing to sign up for.',
+  title: PAGE_SEO.home.title,
+  description: PAGE_SEO.home.description,
   alternates: { canonical: '/' },
 };
 

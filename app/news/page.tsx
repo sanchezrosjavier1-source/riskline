@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { AlertTriangle, ArrowUpRight, RefreshCw } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -10,9 +11,8 @@ import { DISCLAIMER, SITE, absoluteUrl } from '@/lib/site';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'This Week in Markets — 9 Headlines That Moved Prices',
-  description:
-    'The week&rsquo;s market headlines from established finance desks, refreshed automatically, each linked back to the publisher.',
+  title: PAGE_SEO.news.title,
+  description: PAGE_SEO.news.description,
   alternates: { canonical: '/news' },
   openGraph: {
     title: `Market News — ${SITE.name}`,

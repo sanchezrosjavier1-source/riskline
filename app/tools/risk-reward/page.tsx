@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -8,9 +9,8 @@ import { getTerm } from '@/lib/dictionary';
 import { DISCLAIMER, SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Risk/Reward Calculator — Ratio & Break-Even Win Rate',
-  description:
-    'Free risk/reward calculator. Enter entry, stop and target to get the risk/reward ratio and the win rate you need just to break even.',
+  title: PAGE_SEO.riskReward.title,
+  description: PAGE_SEO.riskReward.description,
   keywords: [
     'risk reward calculator',
     'risk reward ratio calculator',

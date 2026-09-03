@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight, Calendar } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -7,9 +8,8 @@ import { ALL_HISTORY_EVENTS, getHistoryCategories } from '@/lib/history';
 import { SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Market History — 24 Events That Explain Modern Risk',
-  description:
-    'From Black Monday to the 2025 tariff shock: 24 landmark market events, chronologically, each explaining what happened and the risk-management lesson still worth knowing today.',
+  title: PAGE_SEO.marketHistory.title,
+  description: PAGE_SEO.marketHistory.description,
   alternates: { canonical: '/market-history' },
   openGraph: {
     title: `Market History — ${SITE.name}`,

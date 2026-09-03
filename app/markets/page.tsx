@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { AlertTriangle, ArrowRight, Clock } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -11,9 +12,8 @@ import { SITE, absoluteUrl } from '@/lib/site';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: 'Live Crypto & Forex Prices — Size Any Trade',
-  description:
-    'Live crypto prices and official ECB forex rates, with a one-click jump into the risk calculator so you can size a position on any of them in seconds.',
+  title: PAGE_SEO.markets.title,
+  description: PAGE_SEO.markets.description,
   alternates: { canonical: '/markets' },
   openGraph: {
     title: `Markets — ${SITE.name}`,

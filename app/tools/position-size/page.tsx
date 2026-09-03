@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -8,9 +9,8 @@ import { getTerm } from '@/lib/dictionary';
 import { DISCLAIMER, SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Position Size Calculator — How Many Shares Should You Buy?',
-  description:
-    'Free position size calculator. Enter account size, risk %, entry and stop loss to find exactly how many shares to trade — long or short, formula explained.',
+  title: PAGE_SEO.positionSize.title,
+  description: PAGE_SEO.positionSize.description,
   keywords: [
     'position size calculator',
     'how to calculate position size',

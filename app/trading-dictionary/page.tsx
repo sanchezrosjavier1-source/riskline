@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -10,8 +11,8 @@ import { SITE, absoluteUrl } from '@/lib/site';
 import type { CategoryId } from '@/types/dictionary';
 
 export const metadata: Metadata = {
-  title: 'Trading Dictionary — Understand the Language of the Market',
-  description: `${ALL_TERMS.length} trading terms explained in plain English, with interactive examples, formulas and the mistakes people actually make. Free, no sign-up.`,
+  title: PAGE_SEO.dictionary.title,
+  description: PAGE_SEO.dictionary.description,
   alternates: { canonical: '/trading-dictionary' },
   openGraph: {
     title: `Trading Dictionary — ${SITE.name}`,

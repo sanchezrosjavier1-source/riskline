@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -17,9 +18,8 @@ import { getTerm } from '@/lib/dictionary';
 import { SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Trading Calculators — Position Size, Risk & Reward',
-  description:
-    'Free trading calculators for position sizing, risk management and risk/reward. Every result is explained and links to the concept behind it.',
+  title: PAGE_SEO.tools.title,
+  description: PAGE_SEO.tools.description,
   alternates: { canonical: '/tools' },
   openGraph: {
     title: `Trading Calculators — ${SITE.name}`,
