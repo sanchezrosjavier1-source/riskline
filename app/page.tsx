@@ -418,7 +418,7 @@ export default function HomePage() {
                 The risk lessons markets already paid for
               </h2>
               <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-muted">
-                Twenty landmark events, 1987 to 2022, each ending in the risk-management lesson
+                Twenty-four landmark events, 1987 to 2025, each ending in the risk-management lesson
                 still worth knowing.
               </p>
             </div>
@@ -426,7 +426,7 @@ export default function HomePage() {
               href="/market-history"
               className="group inline-flex items-center gap-1.5 text-xs font-medium text-accent-soft transition-colors hover:text-accent"
             >
-              See all 20 events
+              See all 24 events
               <ArrowRight
                 size={13}
                 aria-hidden

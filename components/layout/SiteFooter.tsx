@@ -64,7 +64,7 @@ export function SiteFooter() {
                   {event.label}
                 </FooterLink>
               ))}
-              <FooterLink href="/market-history">All 20 events</FooterLink>
+              <FooterLink href="/market-history">All 24 events</FooterLink>
             </FooterColumn>
 
             <FooterColumn title="Browse by topic">

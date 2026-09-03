@@ -9,6 +9,10 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
     year: 2008,
     category: 'Systemic Risk',
     dek: 'A downturn in the US housing market cascaded into a global financial crisis after highly leveraged bets on mortgage debt, spread across the banking system, turned manageable losses into a solvency crisis.',
+    image: {
+      src: '/images/history/global-financial-crisis-2008.jpg',
+      alt: 'A "for sale" sign outside a house',
+    },
     facts: [
       { label: 'S&P 500 peak-to-trough decline', value: '−57%' },
       { label: 'Lehman Brothers', value: 'Filed the largest bankruptcy in US history' },
@@ -33,6 +37,10 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
     year: 2008,
     category: 'Fraud & Collapse',
     dek: 'Bernie Madoff ran the largest Ponzi scheme in history, reporting steady, market-beating returns for decades that were entirely fabricated — the fraud only surfaced when the 2008 crisis triggered enough redemption requests to expose it.',
+    image: {
+      src: '/images/history/madoff-ponzi-scheme-2008.jpg',
+      alt: 'A dramatic black-and-white photo of classical courthouse columns',
+    },
     facts: [
       { label: 'Estimated scale of fraud', value: '~$65 billion (reported balances)' },
       { label: 'Duration', value: 'Reportedly decades' },
@@ -57,6 +65,10 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
     year: 2010,
     category: 'Systemic Risk',
     dek: 'The Dow Jones plunged around 9% in minutes — including a period where some stocks traded for pennies — before largely recovering the same afternoon, exposing how thin liquidity had become in electronic, algorithm-driven markets.',
+    image: {
+      src: '/images/history/flash-crash-2010.jpg',
+      alt: 'A dark trading screen showing a red-and-green candlestick chart',
+    },
     facts: [
       { label: 'Intraday decline', value: '~9% in about 36 minutes' },
       { label: 'Recovery', value: 'Most of the loss reversed the same day' },
@@ -81,6 +93,10 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
     year: 2010,
     category: 'Systemic Risk',
     dek: 'Greece, and later other eurozone countries, came close to defaulting on sovereign debt that investors had long treated as essentially risk-free — forcing a reassessment of what "safe" actually means in a currency union without a shared fiscal backstop.',
+    image: {
+      src: '/images/history/european-debt-crisis-2010.jpg',
+      alt: 'A scattered pile of euro banknotes',
+    },
     facts: [
       { label: 'Greek 10-year bond yield peak', value: 'Above 30%' },
       { label: 'Countries requiring bailouts', value: 'Greece, Ireland, Portugal, Cyprus' },
@@ -105,6 +121,10 @@ export const financialCrisisEraEvents: HistoryEvent[] = [
     year: 2012,
     category: 'Leverage & Derivatives',
     dek: 'A botched software deployment caused Knight Capital\'s trading systems to flood the market with unintended orders, losing roughly $440 million in 45 minutes and destroying the firm — a pure technology and process failure, with no market crash involved at all.',
+    image: {
+      src: '/images/history/knight-capital-2012.jpg',
+      alt: 'A rack of server hardware with glowing red indicator lights',
+    },
     facts: [
       { label: 'Losses', value: '~$440 million' },
       { label: 'Duration', value: '45 minutes' },

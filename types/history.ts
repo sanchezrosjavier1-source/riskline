@@ -11,6 +11,13 @@ export interface HistoryFact {
   value: string;
 }
 
+export interface HistoryImage {
+  /** Path under /public, e.g. "/images/history/black-monday-1987.jpg". */
+  src: string;
+  /** Describes what's in the photo, not the event — read by screen readers. */
+  alt: string;
+}
+
 export interface HistoryEvent {
   slug: string;
   title: string;
@@ -27,6 +34,8 @@ export interface HistoryEvent {
   category: HistoryCategory;
   /** One or two sentences shown on the index card. */
   dek: string;
+  /** A real, related photo shown at the top of the article. */
+  image: HistoryImage;
   /** Two to four short stat callouts shown at the top of the article. */
   facts: HistoryFact[];
   /** What happened, in order. */

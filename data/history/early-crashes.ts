@@ -9,6 +9,10 @@ export const earlyCrashesEvents: HistoryEvent[] = [
     year: 1987,
     category: 'Stock Market Crash',
     dek: 'The Dow Jones Industrial Average fell 22.6% in a single trading day — still the largest one-day percentage decline in its history — with no single piece of news to explain it.',
+    image: {
+      src: '/images/history/black-monday-1987.jpg',
+      alt: 'The New York Stock Exchange building facade with American flags',
+    },
     facts: [
       { label: 'One-day decline', value: '−22.6%' },
       { label: 'Index', value: 'Dow Jones Industrial Average' },
@@ -32,6 +36,10 @@ export const earlyCrashesEvents: HistoryEvent[] = [
     year: 1992,
     category: 'Currency Crisis',
     dek: 'The UK was forced out of the European Exchange Rate Mechanism in a single day after speculators, including George Soros, bet billions against the pound holding its pegged value.',
+    image: {
+      src: '/images/history/black-wednesday-1992.jpg',
+      alt: 'A pile of British pound sterling banknotes',
+    },
     facts: [
       { label: 'Estimated UK Treasury cost', value: '£3.3 billion+' },
       { label: 'Soros fund profit (reported)', value: '~$1 billion' },
@@ -56,6 +64,10 @@ export const earlyCrashesEvents: HistoryEvent[] = [
     year: 1998,
     category: 'Leverage & Derivatives',
     dek: 'A hedge fund run by Nobel laureates and star traders lost over $4 billion in a matter of weeks, threatening the wider financial system and forcing a Wall Street-funded bailout.',
+    image: {
+      src: '/images/history/ltcm-collapse-1998.jpg',
+      alt: 'A black-and-white photo of a Wall Street street sign',
+    },
     facts: [
       { label: 'Peak leverage', value: 'Reported around 25:1 on capital' },
       { label: 'Losses', value: '$4.6 billion in under 4 months' },
@@ -80,6 +92,10 @@ export const earlyCrashesEvents: HistoryEvent[] = [
     year: 2000,
     category: 'Stock Market Crash',
     dek: 'The Nasdaq Composite fell nearly 78% from its peak as investors realized that many internet companies trading at enormous valuations had little revenue and no path to profit.',
+    image: {
+      src: '/images/history/dotcom-bubble-2000.jpg',
+      alt: 'A retro white Macintosh computer from the late 1990s',
+    },
     facts: [
       { label: 'Nasdaq peak-to-trough decline', value: '−78%' },
       { label: 'Duration of decline', value: 'About 2.5 years' },
@@ -104,6 +120,10 @@ export const earlyCrashesEvents: HistoryEvent[] = [
     year: 2001,
     category: 'Fraud & Collapse',
     dek: 'Once America\'s seventh-largest company by revenue, Enron collapsed into bankruptcy within weeks after accounting fraud that had hidden billions in debt was exposed — wiping out employees who held their retirement savings in company stock.',
+    image: {
+      src: '/images/history/enron-collapse-2001.jpg',
+      alt: 'An industrial tower at an energy plant lit up at night',
+    },
     facts: [
       { label: 'Market value at peak', value: '~$70 billion' },
       { label: 'Time from scandal to bankruptcy', value: 'About 6 weeks' },

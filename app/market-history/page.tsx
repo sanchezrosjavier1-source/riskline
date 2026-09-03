@@ -7,14 +7,14 @@ import { ALL_HISTORY_EVENTS, getHistoryCategories } from '@/lib/history';
 import { SITE, absoluteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Market History — 20 Events That Explain Modern Risk',
+  title: 'Market History — 24 Events That Explain Modern Risk',
   description:
-    'From Black Monday to FTX: 20 landmark market events, chronologically, each explaining what happened and the risk-management lesson still worth knowing today.',
+    'From Black Monday to the 2025 tariff shock: 24 landmark market events, chronologically, each explaining what happened and the risk-management lesson still worth knowing today.',
   alternates: { canonical: '/market-history' },
   openGraph: {
     title: `Market History — ${SITE.name}`,
     description:
-      '20 landmark market events from 1987 to 2022, each with the risk-management lesson behind it.',
+      '24 landmark market events from 1987 to 2025, each with the risk-management lesson behind it.',
     url: absoluteUrl('/market-history'),
   },
 };
@@ -45,8 +45,8 @@ export default function MarketHistoryIndexPage() {
           Market History
         </h1>
         <p className="mt-3 text-pretty text-[0.9375rem] leading-relaxed text-ink-muted">
-          Twenty moments, from 1987 to 2022, where leverage, liquidity or trust broke down in a way
-          that moved markets. Each one is a closed, verifiable event — not news that will need
+          Twenty-four moments, from 1987 to 2025, where leverage, liquidity or trust broke down in a
+          way that moved markets. Each one is a closed, verifiable event — not news that will need
           updating — with the risk-management lesson still worth knowing spelled out at the end.
         </p>
       </header>

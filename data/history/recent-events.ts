@@ -9,6 +9,10 @@ export const recentEvents: HistoryEvent[] = [
     year: 2021,
     category: 'Leverage & Derivatives',
     dek: 'A coordinated wave of retail buying, organized largely on social media, forced heavily shorted hedge funds to buy back shares at rapidly rising prices — sending GameStop up over 1,600% in weeks and inflicting billions in losses on short sellers.',
+    image: {
+      src: '/images/history/gamestop-short-squeeze-2021.jpg',
+      alt: 'A black-and-white video game controller',
+    },
     facts: [
       { label: 'January 2021 gain (approx.)', value: '1,600%+' },
       { label: 'Reported short interest before the squeeze', value: 'Over 100% of shares outstanding' },
@@ -33,6 +37,10 @@ export const recentEvents: HistoryEvent[] = [
     year: 2021,
     category: 'Leverage & Derivatives',
     dek: 'A little-known family office built enormous, highly leveraged concentrated positions through opaque derivatives, and its collapse in a single week forced a fire sale that cost global banks billions and helped end the careers of several senior executives.',
+    image: {
+      src: '/images/history/archegos-collapse-2021.jpg',
+      alt: 'The Manhattan skyline lit up at night, reflected in the water',
+    },
     facts: [
       { label: 'Estimated exposure before collapse', value: 'Reported around $100 billion' },
       { label: 'Bank losses (combined, reported)', value: '$10 billion+' },
@@ -57,6 +65,10 @@ export const recentEvents: HistoryEvent[] = [
     year: 2022,
     category: 'Crypto',
     dek: 'TerraUSD, a stablecoin designed to hold its dollar peg through an algorithmic relationship with a sister token called LUNA, collapsed within days, erasing roughly $40 billion in value and triggering a wave of losses across the crypto industry.',
+    image: {
+      src: '/images/history/terra-luna-collapse-2022.jpg',
+      alt: 'A pile of gold coins sitting on loose gravel',
+    },
     facts: [
       { label: 'Combined value erased (approx.)', value: '$40 billion' },
       { label: 'Time from depeg to near-zero', value: 'About one week' },
@@ -81,6 +93,10 @@ export const recentEvents: HistoryEvent[] = [
     year: 2022,
     category: 'Fraud & Collapse',
     dek: 'FTX, one of the largest cryptocurrency exchanges in the world, collapsed within days after reporting revealed customer funds had been used to cover losses at a related trading firm — a stark lesson in counterparty and custody risk.',
+    image: {
+      src: '/images/history/ftx-collapse-2022.jpg',
+      alt: 'A red padlock resting on a backlit computer keyboard',
+    },
     facts: [
       { label: 'Reported valuation before collapse', value: '~$32 billion' },
       { label: 'Time from first reports to bankruptcy', value: 'About one week' },
@@ -105,6 +121,10 @@ export const recentEvents: HistoryEvent[] = [
     year: 2022,
     category: 'Systemic Risk',
     dek: 'A UK government budget announcement triggered a sharp bond selloff that exposed hidden leverage inside pension funds, forcing an emergency central bank intervention within days to prevent a broader financial spiral.',
+    image: {
+      src: '/images/history/uk-gilt-crisis-2022.jpg',
+      alt: 'A classical London financial building with tall columns',
+    },
     facts: [
       { label: '30-year gilt yield move', value: 'Sharpest in decades, in days' },
       { label: 'Bank of England response', value: 'Emergency bond-buying program' },

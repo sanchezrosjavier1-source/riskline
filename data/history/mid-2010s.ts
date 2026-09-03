@@ -9,6 +9,10 @@ export const mid2010sEvents: HistoryEvent[] = [
     year: 2015,
     category: 'Currency Crisis',
     dek: 'The Swiss National Bank abruptly abandoned its franc-to-euro cap, sending the currency up as much as 30% in minutes and instantly wiping out — or reversing into deep negative balances — countless leveraged retail forex positions.',
+    image: {
+      src: '/images/history/swiss-franc-shock-2015.jpg',
+      alt: 'A Swiss flag waving on a mountainside',
+    },
     facts: [
       { label: 'EUR/CHF move', value: 'Roughly 30% in minutes' },
       { label: 'Warning given', value: 'None' },
@@ -33,6 +37,10 @@ export const mid2010sEvents: HistoryEvent[] = [
     year: 2016,
     category: 'Stock Market Crash',
     dek: 'China introduced market-wide circuit breakers meant to calm panic selling — and pulled them after just four trading days, when the mechanism instead encouraged investors to sell faster, racing to get out before a halt locked them in.',
+    image: {
+      src: '/images/history/china-circuit-breaker-2016.jpg',
+      alt: 'An aerial night view of the Shanghai skyline along the Huangpu river',
+    },
     facts: [
       { label: 'Circuit breaker lifespan', value: '4 trading days' },
       { label: 'Trigger thresholds', value: '5% and 7% index moves' },
@@ -57,6 +65,10 @@ export const mid2010sEvents: HistoryEvent[] = [
     year: 2016,
     category: 'Currency Crisis',
     dek: 'The pound fell over 8% against the dollar within hours as referendum results came in showing the UK had voted to leave the European Union — a result most markets had been positioned against.',
+    image: {
+      src: '/images/history/brexit-referendum-2016.jpg',
+      alt: 'The Big Ben clock tower rising above London',
+    },
     facts: [
       { label: 'GBP/USD overnight move', value: '−8%+ in hours' },
       { label: '31-year low reached', value: 'Yes, briefly' },
@@ -81,6 +93,10 @@ export const mid2010sEvents: HistoryEvent[] = [
     year: 2018,
     category: 'Leverage & Derivatives',
     dek: 'A sharp spike in market volatility triggered a feedback loop in products designed to profit from calm markets, destroying the value of one popular fund (XIV) by 96% in a single session and effectively ending it.',
+    image: {
+      src: '/images/history/volmageddon-2018.jpg',
+      alt: 'A dark trading screen showing a candlestick chart in a downtrend with moving averages',
+    },
     facts: [
       { label: 'XIV single-day decline', value: '~96%' },
       { label: 'VIX (volatility index) spike', value: 'More than doubled intraday' },
@@ -105,6 +121,10 @@ export const mid2010sEvents: HistoryEvent[] = [
     year: 2017,
     category: 'Crypto',
     dek: 'Bitcoin rose roughly twentyfold in a single year on a wave of retail enthusiasm, then fell more than 80% over the following year — a textbook speculative bubble, compressed into crypto\'s characteristically extreme volatility.',
+    image: {
+      src: '/images/history/bitcoin-bubble-2017.jpg',
+      alt: 'A gold-colored bitcoin coin',
+    },
     facts: [
       { label: '2017 gain (approx.)', value: 'From ~$1,000 to ~$19,700' },
       { label: '2018 decline from peak', value: 'More than 80%' },

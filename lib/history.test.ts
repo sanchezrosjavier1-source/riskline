@@ -13,8 +13,8 @@ import { TERM_MAP } from './dictionary';
 import { buildDescription, buildTitle, BRAND_SUFFIX_LENGTH, MAX_TITLE } from './seo';
 
 describe('history corpus', () => {
-  it('has exactly 20 events', () => {
-    expect(ALL_HISTORY_EVENTS.length).toBe(20);
+  it('has exactly 24 events', () => {
+    expect(ALL_HISTORY_EVENTS.length).toBe(24);
   });
 
   it('has unique slugs', () => {
@@ -47,6 +47,33 @@ describe('history corpus', () => {
 
   it('covers more than one category', () => {
     expect(getHistoryCategories().length).toBeGreaterThanOrEqual(4);
+  });
+});
+
+describe('event images', () => {
+  it('every event has a real image with a non-empty src and alt', () => {
+    for (const event of ALL_HISTORY_EVENTS) {
+      expect(event.image.src, event.title).toMatch(/^\/images\/history\/.+\.jpg$/);
+      expect(event.image.alt.length, event.title).toBeGreaterThan(10);
+    }
+  });
+
+  it('every image path matches its event slug, and no two events share one', () => {
+    const paths = ALL_HISTORY_EVENTS.map((e) => e.image.src);
+    expect(new Set(paths).size).toBe(paths.length);
+    for (const event of ALL_HISTORY_EVENTS) {
+      expect(event.image.src).toBe(`/images/history/${event.slug}.jpg`);
+    }
+  });
+
+  it('describes what is in the photo, not the event itself', () => {
+    // A caption like "Black Monday 1987" would be a mislabeled illustration, not a
+    // real photo description — alt text should describe the literal image content.
+    for (const event of ALL_HISTORY_EVENTS) {
+      expect(event.image.alt.toLowerCase(), event.title).not.toContain(
+        event.title.toLowerCase().slice(0, 15),
+      );
+    }
   });
 });
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Calendar, Lightbulb } from 'lucide-react';
@@ -41,11 +42,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: event.dek,
       url: absoluteUrl(`/market-history/${event.slug}`),
       siteName: SITE.name,
+      images: [{ url: absoluteUrl(event.image.src) }],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${event.title} — ${SITE.name}`,
       description: event.dek,
+      images: [absoluteUrl(event.image.src)],
     },
   };
 }
@@ -70,6 +73,7 @@ export default async function HistoryEventPage({ params }: PageProps) {
     mainEntityOfPage: absoluteUrl(`/market-history/${event.slug}`),
     articleSection: event.category,
     inLanguage: 'en-US',
+    image: absoluteUrl(event.image.src),
   };
 
   return (
@@ -107,6 +111,18 @@ export default async function HistoryEventPage({ params }: PageProps) {
               {event.dek}
             </p>
           </header>
+
+          {/* ------------------------------------------------------------- image */}
+          <figure className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl border border-line">
+            <Image
+              src={event.image.src}
+              alt={event.image.alt}
+              fill
+              sizes="(min-width: 1024px) 55rem, 100vw"
+              className="object-cover"
+              priority
+            />
+          </figure>
 
           {/* -------------------------------------------------------------- facts */}
           <dl className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3">
