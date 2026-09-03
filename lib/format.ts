@@ -3,31 +3,59 @@ import { isFiniteNumber } from './trade-math';
 /** What we print instead of NaN, Infinity or undefined. Never show those. */
 export const PLACEHOLDER = '—';
 
-const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
+/**
+ * Account currencies the calculator can display in. The maths never changes —
+ * a position size is the same number whether the account is in dollars or
+ * euros — so this is purely how the money is written.
+ */
+export const ACCOUNT_CURRENCIES = [
+  { code: 'USD', symbol: '$', label: 'US Dollar' },
+  { code: 'EUR', symbol: '€', label: 'Euro' },
+  { code: 'GBP', symbol: '£', label: 'British Pound' },
+  { code: 'JPY', symbol: '¥', label: 'Japanese Yen' },
+  { code: 'CHF', symbol: 'CHF', label: 'Swiss Franc' },
+  { code: 'AUD', symbol: 'A$', label: 'Australian Dollar' },
+  { code: 'CAD', symbol: 'C$', label: 'Canadian Dollar' },
+] as const;
 
-const currencyWhole = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-});
+export type CurrencyCode = (typeof ACCOUNT_CURRENCIES)[number]['code'];
+
+export function currencySymbol(code: CurrencyCode = 'USD'): string {
+  return ACCOUNT_CURRENCIES.find((c) => c.code === code)?.symbol ?? '$';
+}
+
+// Intl formatters are expensive to build, so each currency gets made once.
+const formatterCache = new Map<string, Intl.NumberFormat>();
+
+function formatter(code: CurrencyCode, whole: boolean): Intl.NumberFormat {
+  const key = `${code}:${whole}`;
+  const cached = formatterCache.get(key);
+  if (cached) return cached;
+
+  const digits = whole ? 0 : 2;
+  const created = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: code,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+  formatterCache.set(key, created);
+  return created;
+}
 
 const compact = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   maximumFractionDigits: 1,
 });
 
-/** Money, always with a currency symbol. Whole dollars when the cents are zero. */
-export function formatCurrency(value: number | null | undefined): string {
+/** Money, always with a currency symbol. Whole units when there are no cents. */
+export function formatCurrency(
+  value: number | null | undefined,
+  code: CurrencyCode = 'USD',
+): string {
   if (!isFiniteNumber(value)) return PLACEHOLDER;
-  if (Math.abs(value) >= 1_000_000) return `$${compact.format(value)}`;
-  if (Number.isInteger(value)) return currencyWhole.format(value);
-  return currency.format(value);
+  if (Math.abs(value) >= 1_000_000) return `${currencySymbol(code)}${compact.format(value)}`;
+  return formatter(code, Number.isInteger(value)).format(value);
 }
 
 /**

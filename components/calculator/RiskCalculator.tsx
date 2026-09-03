@@ -21,6 +21,8 @@ import { TradeLadder } from './TradeLadder';
 import { MathBreakdown } from './MathBreakdown';
 import { calculateTrade } from '@/lib/trade-math';
 import {
+  ACCOUNT_CURRENCIES,
+  currencySymbol,
   formatCurrency,
   formatNumber,
   formatPercent,
@@ -28,8 +30,9 @@ import {
   formatRatio,
   formatUnits,
   PLACEHOLDER,
+  type CurrencyCode,
 } from '@/lib/format';
-import { useSessionState } from '@/lib/hooks';
+import { useLocalState, useSessionState } from '@/lib/hooks';
 import type { Direction, IssueField, Market, TradeInput } from '@/types/trade';
 
 export interface CalculatorInitialValues {
@@ -137,9 +140,9 @@ const LOT_SIZES: LotSizeOption[] = [
 ];
 
 /** Currency for normal prices, extra decimals for sub-$1 instruments like forex pairs. */
-function priceLabel(value: number | null | undefined): string {
+function priceLabel(value: number | null | undefined, code: CurrencyCode = 'USD'): string {
   if (typeof value !== 'number' || !Number.isFinite(value)) return PLACEHOLDER;
-  return Math.abs(value) < 1 ? formatPrice(value) : formatCurrency(value);
+  return Math.abs(value) < 1 ? formatPrice(value) : formatCurrency(value, code);
 }
 
 const PRESETS: Array<{ name: string; note: string; values: PresetValues }> = [
@@ -214,7 +217,13 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
     Boolean(initial?.market && initial.market !== 'stocks'),
   );
   const [showAllMetrics, setShowAllMetrics] = useState(false);
+  // Remembered across visits: whoever thinks in euros will keep thinking in euros.
+  const [currency, setCurrency] = useLocalState<CurrencyCode>('stopsize:currency', 'USD');
   const [saved, setSaved] = useSessionState<SavedScenario[]>('riskline:scenarios', []);
+
+  /** Every money figure in this component is written in the chosen account currency. */
+  const money = (value: number | null | undefined) => formatCurrency(value, currency);
+  const symbol = currencySymbol(currency);
 
   const marketConfig = MARKETS.find((m) => m.value === market) ?? MARKETS[0];
   const unit = marketConfig.unit;
@@ -251,7 +260,8 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
   // Tells the user what is folded away without making them open it.
   const advancedSummary = [
     marketConfig.label,
-    market === 'futures' ? `${formatCurrency(contractMultiplier ?? 0)}/pt` : null,
+    currency !== 'USD' ? currency : null,
+    market === 'futures' ? `${money(contractMultiplier ?? 0)}/pt` : null,
     takeProfit ? `target ${priceLabel(takeProfit)}` : 'no target',
   ]
     .filter(Boolean)
@@ -279,7 +289,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
 
   const saveScenario = () => {
     if (!result.valid) return;
-    const label = `${direction === 'long' ? 'Long' : 'Short'} @ ${formatCurrency(entry ?? 0)} · ${formatUnits(
+    const label = `${direction === 'long' ? 'Long' : 'Short'} @ ${money(entry ?? 0)} · ${formatUnits(
       result.positionSize,
     )} ${unitPlural}`;
     setSaved((prev) =>
@@ -323,7 +333,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
             label="Account Size"
             value={accountSize}
             onChange={setAccountSize}
-            prefix="$"
+            prefix={symbol}
             step={1000}
             min={0}
             placeholder="10,000"
@@ -342,7 +352,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
             error={errors.riskPercent}
             hint={
               result.valid
-                ? `You are risking ${formatCurrency(result.maxRisk)} on this trade.`
+                ? `You are risking ${money(result.maxRisk)} on this trade.`
                 : undefined
             }
             adornment={
@@ -380,7 +390,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
             label="Entry Price"
             value={entry}
             onChange={setEntry}
-            prefix="$"
+            prefix={symbol}
             step={0.5}
             min={0}
             placeholder="50.00"
@@ -391,7 +401,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
             label="Stop Loss"
             value={stopLoss}
             onChange={setStopLoss}
-            prefix="$"
+            prefix={symbol}
             step={0.5}
             min={0}
             placeholder="48.00"
@@ -437,7 +447,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
             label="Take Profit"
             value={takeProfit}
             onChange={setTakeProfit}
-            prefix="$"
+            prefix={symbol}
             step={0.5}
             min={0}
             optional
@@ -472,12 +482,34 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
             <p className="mt-1.5 text-2xs leading-relaxed text-ink-ghost">{marketConfig.note}.</p>
           </div>
 
+          <div>
+            <label htmlFor="account-currency" className="label mb-2 block">
+              Account Currency
+            </label>
+            <select
+              id="account-currency"
+              value={currency}
+              onChange={(event) => setCurrency(event.target.value as CurrencyCode)}
+              className="h-10 w-full rounded-xl border border-line bg-base-sunken/60 px-3 text-sm text-ink transition-colors hover:border-line-strong focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/20"
+            >
+              {ACCOUNT_CURRENCIES.map((option) => (
+                <option key={option.code} value={option.code}>
+                  {option.symbol} {option.code} — {option.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1.5 text-2xs leading-relaxed text-ink-ghost">
+              Changes how money is written, not the maths — a position size is the same number in
+              any currency.
+            </p>
+          </div>
+
           {market === 'futures' && (
             <NumberField
               label="Contract Multiplier"
               value={contractMultiplier}
               onChange={setContractMultiplier}
-              prefix="$"
+              prefix={symbol}
               suffix="/ pt"
               step={1}
               min={0}
@@ -585,7 +617,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                       Math.abs(lots) === 1 ? '' : 's'
                     }`
                   : result.valid && result.positionSizeWhole !== result.positionSize
-                    ? `${formatUnits(result.positionSizeWhole)} whole ${unitPlural} risks ${formatCurrency(
+                    ? `${formatUnits(result.positionSizeWhole)} whole ${unitPlural} risks ${money(
                         result.riskAtWholeUnits,
                       )}`
                     : undefined
@@ -607,7 +639,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
               tone="risk"
               value={
                 result.valid ? (
-                  <AnimatedNumber value={result.maxRisk} format={(v) => formatCurrency(v)} />
+                  <AnimatedNumber value={result.maxRisk} format={(v) => money(v)} />
                 ) : (
                   PLACEHOLDER
                 )
@@ -629,7 +661,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                 tone="risk"
                 value={
                   result.valid ? (
-                    <AnimatedNumber value={-result.potentialLoss} format={(v) => formatCurrency(v)} />
+                    <AnimatedNumber value={-result.potentialLoss} format={(v) => money(v)} />
                   ) : (
                     PLACEHOLDER
                   )
@@ -668,7 +700,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
               label={`Risk Per ${unit}`}
               value={
                 result.valid ? (
-                  <AnimatedNumber value={result.dollarRiskPerUnit} format={priceLabel} />
+                  <AnimatedNumber value={result.dollarRiskPerUnit} format={(v) => priceLabel(v, currency)} />
                 ) : (
                   PLACEHOLDER
                 )
@@ -691,7 +723,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
               label="Position Value"
               value={
                 result.valid ? (
-                  <AnimatedNumber value={result.positionValue} format={(v) => formatCurrency(v)} />
+                  <AnimatedNumber value={result.positionValue} format={(v) => money(v)} />
                 ) : (
                   PLACEHOLDER
                 )
@@ -716,7 +748,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
                 result.valid && result.potentialProfit !== null ? (
                   <AnimatedNumber
                     value={result.potentialProfit}
-                    format={(v) => (v === null ? PLACEHOLDER : `+${formatCurrency(v)}`)}
+                    format={(v) => (v === null ? PLACEHOLDER : `+${money(v)}`)}
                   />
                 ) : (
                   PLACEHOLDER
@@ -815,7 +847,7 @@ export function RiskCalculator({ initial }: { initial?: CalculatorInitialValues 
           </div>
         )}
 
-        <MathBreakdown input={input} result={result} unit={unit} defaultOpen={false} />
+        <MathBreakdown input={input} result={result} unit={unit} currency={currency} defaultOpen={false} />
 
         {saved.length > 0 && (
           <section className="panel-flat p-5">

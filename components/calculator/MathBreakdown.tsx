@@ -11,6 +11,7 @@ import {
   formatRatio,
   formatUnits,
 } from '@/lib/format';
+import type { CurrencyCode } from '@/lib/format';
 import type { TradeInput, TradeResult } from '@/types/trade';
 
 interface Step {
@@ -21,7 +22,13 @@ interface Step {
   slug?: string;
 }
 
-function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[] {
+function buildSteps(
+  input: TradeInput,
+  result: TradeResult,
+  unit: string,
+  code: CurrencyCode,
+): Step[] {
+  const money = (value: number | null | undefined) => formatCurrency(value, code);
   const { accountSize, riskPercent, direction, entry, stopLoss, takeProfit } = input;
   const long = direction === 'long';
   const multiplier =
@@ -33,8 +40,8 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
   const steps: Step[] = [
     {
       label: 'Maximum Risk',
-      working: `${formatCurrency(accountSize)} × ${formatNumber(riskPercent, 3)}%`,
-      result: formatCurrency(result.maxRisk),
+      working: `${money(accountSize)} × ${formatNumber(riskPercent, 3)}%`,
+      result: money(result.maxRisk),
       slug: 'risk-per-trade',
     },
     {
@@ -50,7 +57,7 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
   if (hasMultiplier) {
     steps.push({
       label: `Risk Per ${unit}`,
-      working: `${formatCompactPrice(result.riskPerUnit)} × ${formatCurrency(multiplier)}/pt`,
+      working: `${formatCompactPrice(result.riskPerUnit)} × ${money(multiplier)}/pt`,
       result: formatCompactPrice(result.dollarRiskPerUnit),
     });
   }
@@ -58,7 +65,7 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
   steps.push(
     {
       label: 'Position Size',
-      working: `${formatCurrency(result.maxRisk)} ÷ ${formatCompactPrice(result.dollarRiskPerUnit)}`,
+      working: `${money(result.maxRisk)} ÷ ${formatCompactPrice(result.dollarRiskPerUnit)}`,
       result: `${formatUnits(result.positionSize)} ${unit.toLowerCase()}${
         result.positionSize === 1 ? '' : 's'
       }`,
@@ -67,9 +74,9 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
     {
       label: 'Position Value',
       working: hasMultiplier
-        ? `${formatUnits(result.positionSize)} × ${formatCompactPrice(entry)} × ${formatCurrency(multiplier)}/pt`
+        ? `${formatUnits(result.positionSize)} × ${formatCompactPrice(entry)} × ${money(multiplier)}/pt`
         : `${formatUnits(result.positionSize)} × ${formatCompactPrice(entry)}`,
-      result: formatCurrency(result.positionValue),
+      result: money(result.positionValue),
       slug: 'notional-value',
     },
   );
@@ -86,9 +93,9 @@ function buildSteps(input: TradeInput, result: TradeResult, unit: string): Step[
     steps.push({
       label: 'Potential Profit',
       working: hasMultiplier
-        ? `${formatUnits(result.positionSize)} × ${formatCompactPrice(result.rewardPerUnit)} × ${formatCurrency(multiplier)}/pt`
+        ? `${formatUnits(result.positionSize)} × ${formatCompactPrice(result.rewardPerUnit)} × ${money(multiplier)}/pt`
         : `${formatUnits(result.positionSize)} × ${formatCompactPrice(result.rewardPerUnit)}`,
-      result: formatCurrency(result.potentialProfit),
+      result: money(result.potentialProfit),
     });
     steps.push({
       label: 'Risk / Reward',
@@ -115,17 +122,19 @@ export function MathBreakdown({
   input,
   result,
   unit = 'Share',
+  currency = 'USD',
   defaultOpen = true,
 }: {
   input: TradeInput;
   result: TradeResult;
   unit?: string;
+  currency?: CurrencyCode;
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
 
   if (!result.valid) return null;
-  const steps = buildSteps(input, result, unit);
+  const steps = buildSteps(input, result, unit, currency);
 
   return (
     <section className="panel-flat overflow-hidden">
