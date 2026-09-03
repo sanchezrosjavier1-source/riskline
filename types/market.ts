@@ -28,6 +28,19 @@ export interface MarketQuote {
   asOf: string | null;
 }
 
+export interface PricePoint {
+  /** Unix milliseconds. */
+  t: number;
+  price: number;
+}
+
+export interface PriceHistory {
+  points: PricePoint[];
+  failed: boolean;
+  /** How granular the underlying data actually is, stated rather than implied. */
+  granularity: 'intraday' | 'daily';
+}
+
 export interface MarketSnapshot {
   quotes: MarketQuote[];
   /** True when the upstream call failed and the section should degrade gracefully. */

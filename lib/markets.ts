@@ -1,4 +1,10 @@
-import type { AssetClass, MarketQuote, MarketSnapshot } from '@/types/market';
+import type {
+  AssetClass,
+  MarketQuote,
+  MarketSnapshot,
+  PriceHistory,
+  PricePoint,
+} from '@/types/market';
 
 /**
  * Market data lives behind two keyless, publicly redistributable sources:
@@ -277,4 +283,136 @@ export async function fetchAllQuotes(): Promise<{
 }> {
   const [crypto, forex] = await Promise.all([fetchCryptoQuotes(), fetchForexQuotes()]);
   return { crypto, forex };
+}
+
+// -------------------------------------------------------------------- history
+
+export const CHART_RANGES = [
+  { value: '1d', label: '1D', days: 1 },
+  { value: '1w', label: '1W', days: 7 },
+  { value: '1m', label: '1M', days: 30 },
+  { value: '3m', label: '3M', days: 90 },
+  { value: '6m', label: '6M', days: 180 },
+  { value: '1y', label: '1Y', days: 365 },
+] as const;
+
+export type ChartRange = (typeof CHART_RANGES)[number]['value'];
+
+export function rangeConfig(value: string | undefined) {
+  return CHART_RANGES.find((range) => range.value === value) ?? CHART_RANGES[2];
+}
+
+/**
+ * Turns price points into an SVG polyline. Pure, so the geometry is testable
+ * without rendering anything. Returns null when there is nothing to draw
+ * rather than a degenerate path.
+ */
+export function buildLinePoints(
+  points: PricePoint[],
+  width: number,
+  height: number,
+  pad = 4,
+): string | null {
+  if (points.length < 2) return null;
+
+  const prices = points.map((point) => point.price).filter((p) => Number.isFinite(p));
+  if (prices.length < 2) return null;
+
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  // A perfectly flat series still deserves a line, drawn down the middle.
+  const span = max - min || 1;
+  const innerWidth = width - pad * 2;
+  const innerHeight = height - pad * 2;
+
+  return points
+    .map((point, index) => {
+      const x = pad + (index / (points.length - 1)) * innerWidth;
+      const y = pad + (1 - (point.price - min) / span) * innerHeight;
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
+    })
+    .join(' ');
+}
+
+/** First-to-last change across a series, used for the chart's own label. */
+export function seriesChangePercent(points: PricePoint[]): number | null {
+  if (points.length < 2) return null;
+  return percentChange(points[0].price, points[points.length - 1].price);
+}
+
+export async function fetchCryptoHistory(id: string, days: number): Promise<PriceHistory> {
+  const interval = days > 1 ? '&interval=daily' : '';
+  const url = `https://api.coingecko.com/api/v3/coins/${encodeURIComponent(
+    id,
+  )}/market_chart?vs_currency=usd&days=${days}${interval}`;
+
+  try {
+    const response = await fetch(url, {
+      next: { revalidate: CRYPTO_REVALIDATE_SECONDS * 5 },
+      headers: { accept: 'application/json' },
+    });
+    if (!response.ok) return { points: [], failed: true, granularity: 'daily' };
+
+    const data = (await response.json()) as { prices?: Array<[number, number]> };
+    const points = (data.prices ?? [])
+      .filter((entry) => Array.isArray(entry) && Number.isFinite(entry[1]))
+      .map<PricePoint>(([t, price]) => ({ t, price }));
+
+    return {
+      points,
+      failed: points.length === 0,
+      granularity: days > 1 ? 'daily' : 'intraday',
+    };
+  } catch {
+    return { points: [], failed: true, granularity: 'daily' };
+  }
+}
+
+export async function fetchForexHistory(pair: ForexPair, days: number): Promise<PriceHistory> {
+  const symbols = [pair.base, pair.quote].filter((c) => c !== 'USD').join(',');
+  const end = new Date();
+  const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+  const iso = (date: Date) => date.toISOString().slice(0, 10);
+  const url = `https://api.frankfurter.dev/v1/${iso(start)}..${iso(end)}?base=USD&symbols=${symbols}`;
+
+  try {
+    const response = await fetch(url, {
+      next: { revalidate: FOREX_REVALIDATE_SECONDS },
+      headers: { accept: 'application/json' },
+    });
+    if (!response.ok) return { points: [], failed: true, granularity: 'daily' };
+
+    const data = (await response.json()) as FrankfurterSeries;
+    if (!data?.rates) return { points: [], failed: true, granularity: 'daily' };
+
+    const points = Object.keys(data.rates)
+      .sort()
+      .map<PricePoint | null>((date) => {
+        const price = derivePairPrice(data.rates[date] ?? {}, pair);
+        return price === null ? null : { t: Date.parse(date), price };
+      })
+      .filter((point): point is PricePoint => point !== null);
+
+    return { points, failed: points.length === 0, granularity: 'daily' };
+  } catch {
+    return { points: [], failed: true, granularity: 'daily' };
+  }
+}
+
+/** Looks a slug up against both asset lists. Returns null for anything unknown. */
+export function findAsset(
+  id: string,
+): { kind: 'crypto'; id: string } | { kind: 'forex'; pair: ForexPair } | null {
+  const crypto = CRYPTO_IDS.find((candidate) => candidate === id);
+  if (crypto) return { kind: 'crypto', id: crypto };
+
+  const pair = FOREX_PAIRS.find((candidate) => pairId(candidate) === id);
+  if (pair) return { kind: 'forex', pair };
+
+  return null;
+}
+
+/** Every asset that gets its own page — used for static generation and the sitemap. */
+export function allAssetIds(): string[] {
+  return [...CRYPTO_IDS, ...FOREX_PAIRS.map(pairId)];
 }

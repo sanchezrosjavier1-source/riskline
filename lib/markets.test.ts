@@ -1,16 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import {
+  allAssetIds,
+  buildLinePoints,
   derivePairPrice,
   filterQuotes,
+  findAsset,
   FOREX_PAIRS,
   latestTwoDates,
   pairId,
   pairName,
   pairSymbol,
   percentChange,
+  rangeConfig,
+  seriesChangePercent,
   sortQuotes,
 } from './markets';
-import type { MarketQuote } from '@/types/market';
+import type { MarketQuote, PricePoint } from '@/types/market';
 
 /** Real ECB-shaped rates: units of X per 1 USD. */
 const USD_RATES = { EUR: 0.86371, GBP: 0.7377, JPY: 159.6, CHF: 0.79, AUD: 1.52, CAD: 1.36, NZD: 1.66 };
@@ -159,5 +164,88 @@ describe('screener sorting and filtering', () => {
   it('returns everything for an empty query and nothing for no match', () => {
     expect(filterQuotes(quotes, '   ')).toHaveLength(3);
     expect(filterQuotes(quotes, 'zzzz')).toHaveLength(0);
+  });
+});
+
+describe('chart geometry', () => {
+  const series = (prices: number[]): PricePoint[] =>
+    prices.map((price, index) => ({ t: index * 86_400_000, price }));
+
+  it('maps the lowest price to the bottom and the highest to the top', () => {
+    // SVG y grows downward, so the high must produce the *smaller* y.
+    const points = buildLinePoints(series([10, 20]), 100, 100, 0)!;
+    const [first, last] = points.split(' ').map((p) => p.split(',').map(Number));
+    expect(first[1]).toBe(100);
+    expect(last[1]).toBe(0);
+  });
+
+  it('spreads points evenly across the width', () => {
+    const xs = buildLinePoints(series([1, 2, 3]), 100, 50, 0)!
+      .split(' ')
+      .map((p) => Number(p.split(',')[0]));
+    expect(xs).toEqual([0, 50, 100]);
+  });
+
+  it('respects padding on both axes', () => {
+    const points = buildLinePoints(series([10, 20]), 100, 100, 10)!;
+    const coords = points.split(' ').map((p) => p.split(',').map(Number));
+    for (const [x, y] of coords) {
+      expect(x).toBeGreaterThanOrEqual(10);
+      expect(x).toBeLessThanOrEqual(90);
+      expect(y).toBeGreaterThanOrEqual(10);
+      expect(y).toBeLessThanOrEqual(90);
+    }
+  });
+
+  it('draws a flat series down the middle instead of dividing by zero', () => {
+    const points = buildLinePoints(series([50, 50, 50]), 100, 100, 0)!;
+    for (const pair of points.split(' ')) {
+      const y = Number(pair.split(',')[1]);
+      expect(Number.isFinite(y)).toBe(true);
+      expect(y).toBe(100);
+    }
+  });
+
+  it('returns null when there is nothing meaningful to draw', () => {
+    expect(buildLinePoints([], 100, 100)).toBeNull();
+    expect(buildLinePoints(series([10]), 100, 100)).toBeNull();
+    expect(buildLinePoints([{ t: 0, price: Number.NaN }, { t: 1, price: 5 }], 100, 100)).toBeNull();
+  });
+
+  it('measures change from the first point to the last', () => {
+    expect(seriesChangePercent(series([100, 150]))).toBeCloseTo(50, 10);
+    expect(seriesChangePercent(series([100]))).toBeNull();
+    expect(seriesChangePercent([])).toBeNull();
+  });
+});
+
+describe('asset routing', () => {
+  it('resolves a crypto id and a forex pair slug', () => {
+    expect(findAsset('bitcoin')).toEqual({ kind: 'crypto', id: 'bitcoin' });
+    expect(findAsset('eur-usd')).toEqual({ kind: 'forex', pair: { base: 'EUR', quote: 'USD' } });
+  });
+
+  it('returns null for anything unknown, so the route can 404', () => {
+    expect(findAsset('not-a-real-asset')).toBeNull();
+    expect(findAsset('')).toBeNull();
+  });
+
+  it('lists every asset exactly once', () => {
+    const ids = allAssetIds();
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids).toContain('bitcoin');
+    expect(ids).toContain('usd-jpy');
+  });
+
+  it('every listed asset resolves back to something renderable', () => {
+    for (const id of allAssetIds()) {
+      expect(findAsset(id), id).not.toBeNull();
+    }
+  });
+
+  it('falls back to a sensible range for a missing or bogus value', () => {
+    expect(rangeConfig('1y').days).toBe(365);
+    expect(rangeConfig(undefined).value).toBe('1m');
+    expect(rangeConfig('nonsense').value).toBe('1m');
   });
 });

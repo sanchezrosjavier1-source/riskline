@@ -121,15 +121,17 @@ export function MarketTable({ quotes }: { quotes: MarketQuote[] }) {
             return (
               <li key={`${quote.assetClass}-${quote.id}`}>
                 <div className="group flex items-center gap-3 rounded-xl border border-line bg-base-raised/40 p-3.5 transition-all duration-200 hover:border-line-strong hover:bg-base-raised/70 sm:gap-4">
-                  <div className="min-w-0 flex-1">
+                  <Link href={`/markets/${quote.id}`} className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
-                      <span className="display-num text-sm font-medium text-ink">{quote.symbol}</span>
+                      <span className="display-num text-sm font-medium text-ink transition-colors group-hover:text-accent-soft">
+                        {quote.symbol}
+                      </span>
                       <span className="truncate text-2xs text-ink-ghost">{quote.name}</span>
                     </div>
                     <span className="mt-0.5 block text-2xs text-ink-ghost sm:hidden">
                       {quote.source}
                     </span>
-                  </div>
+                  </Link>
 
                   <div className="shrink-0 text-right">
                     <span className="display-num block text-sm text-ink">

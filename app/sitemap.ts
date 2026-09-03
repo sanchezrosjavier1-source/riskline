@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getAllSlugs } from '@/lib/dictionary';
 import { getAllGuideSlugs } from '@/lib/guides';
 import { getAllHistorySlugs } from '@/lib/history';
+import { allAssetIds } from '@/lib/markets';
 import { SITE } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -67,5 +68,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
-  return [...staticRoutes, ...termRoutes, ...guideRoutes, ...historyRoutes];
+  const assetRoutes: MetadataRoute.Sitemap = allAssetIds().map((id) => ({
+    url: `${SITE.url}/markets/${id}`,
+    lastModified: now,
+    changeFrequency: 'daily',
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...termRoutes, ...guideRoutes, ...historyRoutes, ...assetRoutes];
 }
