@@ -101,8 +101,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <head>
+        {/*
+         * fetchPriority="low" keeps this off the critical rendering path — it
+         * still needs to be present in the raw HTML for AdSense's ownership
+         * checker, but nothing about that check depends on how fast it
+         * downloads, so it shouldn't compete with CSS/fonts/content for
+         * bandwidth on a slow connection.
+         */}
         <script
           async
+          fetchPriority="low"
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
           crossOrigin="anonymous"
         />
