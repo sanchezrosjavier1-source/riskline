@@ -23,7 +23,7 @@ export const SITE = {
 export const NAV_LINKS = [
   { href: '/calculator', label: 'Calculate' },
   { href: '/markets', label: 'Markets' },
-  { href: '/tools', label: 'Tools' },
+  { href: '/journal', label: 'Journal' },
   { href: '/trading-dictionary', label: 'Learn' },
 ] as const;
 

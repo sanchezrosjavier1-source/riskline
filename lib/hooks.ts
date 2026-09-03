@@ -127,6 +127,55 @@ export function useSessionState<T>(key: string, initial: T): [T, (value: T | ((p
   return [value, update];
 }
 
+/**
+ * State persisted across browser sessions. Unlike `useSessionState`, this is
+ * for data the user would be upset to lose — a trading journal has to still be
+ * there tomorrow. It stays on their device: nothing is uploaded, which is why
+ * the journal works with no account at all.
+ *
+ * `ready` is false until the stored value has been read, so a component can
+ * avoid flashing "no trades yet" over a journal that is about to load.
+ */
+export function useLocalState<T>(
+  key: string,
+  initial: T,
+  parse?: (raw: unknown) => T,
+): [T, (value: T | ((prev: T) => T)) => void, boolean] {
+  const [value, setValue] = useState<T>(initial);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(key);
+      if (raw !== null) {
+        const parsed: unknown = JSON.parse(raw);
+        setValue(parse ? parse(parsed) : (parsed as T));
+      }
+    } catch {
+      // Private mode, blocked storage, or corrupt JSON — the default stands.
+    }
+    setReady(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  const update = useCallback(
+    (next: T | ((prev: T) => T)) => {
+      setValue((prev) => {
+        const resolved = typeof next === 'function' ? (next as (p: T) => T)(prev) : next;
+        try {
+          window.localStorage.setItem(key, JSON.stringify(resolved));
+        } catch {
+          // Quota exceeded or storage blocked — keep working in memory.
+        }
+        return resolved;
+      });
+    },
+    [key],
+  );
+
+  return [value, update, ready];
+}
+
 /** Debounces a rapidly changing value, used to keep search feeling instant but cheap. */
 export function useDebounced<T>(value: T, ms = 120): T {
   const [debounced, setDebounced] = useState(value);
