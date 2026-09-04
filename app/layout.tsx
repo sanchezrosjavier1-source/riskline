@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
@@ -129,6 +130,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <SiteFooter />
         <ConsentBanner />
+
+        {/*
+         * Cookieless visitor counting. It records page views and where they
+         * came from, and nothing that identifies a person — which is why it
+         * sits outside the consent banner rather than behind it.
+         */}
+        <Analytics />
 
         <script
           type="application/ld+json"

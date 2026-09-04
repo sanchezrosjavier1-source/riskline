@@ -68,10 +68,30 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-sm font-medium text-ink">Analytics</h2>
             <p className="mt-2">
-              We may use a privacy-respecting analytics tool to understand aggregate traffic — which
-              pages are visited, roughly how many people, and from what regions. If enabled, this is
-              disclosed here with the specific provider and what it collects. As of the last update
-              above, no analytics service is active on {SITE.name}.
+              {SITE.name} uses <strong className="font-medium text-ink-muted">Vercel Web
+              Analytics</strong> to understand aggregate traffic: which pages are visited, roughly
+              how many visits there were, which country they came from, and which site or search
+              engine referred them.
+            </p>
+            <p className="mt-2">
+              It is deliberately the least invasive option we could find.{' '}
+              <strong className="font-medium text-ink-muted">It sets no cookies</strong>, stores
+              nothing on your device, and does not build a profile of you or follow you to other
+              sites. It does not record your IP address, and it cannot identify you individually —
+              which is also why we cannot tell you apart from anyone else even if you ask us to.
+            </p>
+            <p className="mt-2">
+              Because it collects no personal data and sets no cookies, it runs without asking for
+              consent. Vercel documents what it collects in their{' '}
+              <a
+                href="https://vercel.com/docs/analytics/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-soft transition-colors hover:text-accent"
+              >
+                analytics privacy policy
+              </a>
+              .
             </p>
           </section>
 
