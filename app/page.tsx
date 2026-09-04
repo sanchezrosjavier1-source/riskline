@@ -82,8 +82,15 @@ export default function HomePage() {
         />
 
         <div className="relative mx-auto max-w-[86rem] px-4 pb-16 pt-14 sm:px-6 sm:pt-20 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-            <div>
+          {/*
+           * Three grid children rather than two, so the running calculator can
+           * sit second on a phone. Stacked the old way it fell below the fold,
+           * and the analytics showed the consequence: 34 page views, 2 of them
+           * on a calculator nobody could see. On desktop the explicit row and
+           * column placement puts the stats back under the copy, unchanged.
+           */}
+          <div className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+            <div className="lg:col-start-1 lg:row-start-1">
               <span className="inline-flex items-center gap-2 rounded-full border border-line bg-base-raised/60 px-3 py-1.5 text-2xs text-ink-muted">
                 <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
                 {SITE.tagline}
@@ -110,29 +117,30 @@ export default function HomePage() {
                 </ButtonLink>
               </div>
 
-              <dl className="mt-9 flex flex-wrap gap-x-8 gap-y-4 border-t border-line pt-6">
-                <div>
-                  <dt className="label">Terms explained</dt>
-                  <dd className="display-num mt-1 text-xl text-ink">{ALL_TERMS.length}</dd>
-                </div>
-                <div>
-                  <dt className="label">Markets covered</dt>
-                  <dd className="display-num mt-1 text-xl text-ink">4</dd>
-                </div>
-                <div>
-                  <dt className="label">Sign-up required</dt>
-                  <dd className="display-num mt-1 text-xl text-reward-soft">None</dd>
-                </div>
-              </dl>
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-2">
               <HeroTradeBuilder />
               <p className="mt-3 px-1 text-2xs leading-relaxed text-ink-ghost">
                 Change any value above — every number updates instantly. This is the same math the
                 full calculator runs.
               </p>
             </div>
+
+            <dl className="flex flex-wrap gap-x-8 gap-y-4 border-t border-line pt-6 lg:col-start-1 lg:row-start-2">
+              <div>
+                <dt className="label">Terms explained</dt>
+                <dd className="display-num mt-1 text-xl text-ink">{ALL_TERMS.length}</dd>
+              </div>
+              <div>
+                <dt className="label">Markets covered</dt>
+                <dd className="display-num mt-1 text-xl text-ink">4</dd>
+              </div>
+              <div>
+                <dt className="label">Sign-up required</dt>
+                <dd className="display-num mt-1 text-xl text-reward-soft">None</dd>
+              </div>
+            </dl>
           </div>
         </div>
       </section>
