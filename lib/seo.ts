@@ -24,6 +24,33 @@ export function buildTitle(name: string, suffixes: string[]): string {
 }
 
 /**
+ * The suffix ladders for dictionary term pages, longest first.
+ *
+ * These live here rather than in the page because the tests need the same
+ * values. When the test kept its own copy, the page's pattern changed and
+ * every assertion still passed against the old one.
+ */
+export function termTitleSuffixes(hasFormula: boolean): string[] {
+  return hasFormula
+    ? [' Meaning, Formula & Example', ' Meaning & Formula', ' Meaning']
+    : [' Meaning & Example', ' Meaning'];
+}
+
+export function termDescriptionSuffixes(hasWidget: boolean): string[] {
+  return hasWidget
+    ? [
+        'Explained in plain English, with a calculator you can try on the page.',
+        'Plain English, plus a calculator on the page.',
+        'With a calculator you can try here.',
+      ]
+    : [
+        'Explained in plain English, with a worked example and the mistakes to avoid.',
+        'Plain English, a worked example and the common mistakes.',
+        'Plain English, with a worked example.',
+      ];
+}
+
+/**
  * Builds a meta description from a required opening sentence plus the first
  * optional suffix that still fits. Suffixes should be ordered longest first.
  */

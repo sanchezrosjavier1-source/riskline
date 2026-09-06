@@ -1,32 +1,35 @@
 import { describe, expect, it } from 'vitest';
-import { BRAND_SUFFIX_LENGTH, MAX_DESCRIPTION, MAX_TITLE, buildDescription, buildTitle } from './seo';
+import {
+  BRAND_SUFFIX_LENGTH,
+  MAX_DESCRIPTION,
+  MAX_TITLE,
+  buildDescription,
+  buildTitle,
+  termDescriptionSuffixes,
+  termTitleSuffixes,
+} from './seo';
 import { ALL_TERMS } from './dictionary';
 import { SITE } from './site';
 
-const TERM_SUFFIXES = [
-  'Definition, formula, worked example and common mistakes.',
-  'Definition, example and the mistakes people make.',
-  'Definition and worked example.',
-];
-
-/** Mirrors the suffix ladder used by the term page. */
-function titleSuffixesFor(hasFormula: boolean): string[] {
-  return hasFormula
-    ? [' — Definition, Formula & Example', ' — Definition & Formula', ' — Definition']
-    : [' — Definition & Example', ' — Definition'];
-}
+// Imported, not copied. This file used to keep its own duplicate of both
+// ladders, so when the term page changed its pattern every assertion here
+// carried on passing against a format the site no longer served.
+const TERM_SUFFIXES = termDescriptionSuffixes(false);
+const titleSuffixesFor = termTitleSuffixes;
 
 describe('buildDescription', () => {
   it('appends the longest suffix that fits', () => {
     const result = buildDescription('A short definition.', TERM_SUFFIXES);
-    expect(result).toBe('A short definition. Definition, formula, worked example and common mistakes.');
+    expect(result).toBe(
+      'A short definition. Explained in plain English, with a worked example and the mistakes to avoid.',
+    );
   });
 
   it('falls back to a shorter suffix when the long one would overflow', () => {
     const base = 'A'.repeat(110);
     const result = buildDescription(base, TERM_SUFFIXES);
     expect(result.length).toBeLessThanOrEqual(MAX_DESCRIPTION);
-    expect(result).toContain('Definition and worked example.');
+    expect(result).toContain('Plain English, with a worked example.');
   });
 
   it('drops every suffix rather than overflowing', () => {
@@ -51,7 +54,7 @@ describe('buildDescription', () => {
 describe('buildTitle', () => {
   it('keeps the richest suffix when it fits', () => {
     expect(buildTitle('Position Size', titleSuffixesFor(true))).toBe(
-      'Position Size — Definition, Formula & Example',
+      'Position Size Meaning, Formula & Example',
     );
   });
 
@@ -89,10 +92,10 @@ describe('meta descriptions stay within the search-result limit', () => {
     expect(SITE.description.length).toBeLessThanOrEqual(MAX_DESCRIPTION);
   });
 
-  it.each(ALL_TERMS.map((t) => [t.term, t.short] as const))(
+  it.each(ALL_TERMS.map((t) => [t.term, t.short, Boolean(t.widget)] as const))(
     '%s produces a description that fits',
-    (_name, short) => {
-      const description = buildDescription(short, TERM_SUFFIXES);
+    (_name, short, hasWidget) => {
+      const description = buildDescription(short, termDescriptionSuffixes(hasWidget));
       expect(description.length).toBeLessThanOrEqual(MAX_DESCRIPTION);
       // A description that is only the bare definition is fine, but it should
       // never be so short that it wastes the slot.

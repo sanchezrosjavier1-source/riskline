@@ -11,12 +11,14 @@ export const MARKET_CALCULATOR_PAGES: MarketCalculatorPage[] = [
     slug: 'forex',
     market: 'forex',
     title: 'Forex Position Size Calculator',
-    metaTitle: 'Forex Position Size Calculator — Pips & Lots',
+    // "Lot size calculator" is searched far more than "forex position size
+    // calculator", because that is what the broker's own screen calls it.
+    metaTitle: 'Forex Lot Size Calculator — Pips to Lots, Free',
     metaDescription:
-      'Work out forex lot size from your account, risk percent and stop in pips. Shows standard, mini and micro lots plus what each pip is worth to you.',
+      'Type your stop in pips or as a price and get the lot size: standard, mini or micro, plus what each pip is worth to you on this trade.',
     keywords: [
-      'forex position size calculator',
       'lot size calculator',
+      'forex position size calculator',
       'pip calculator',
       'forex risk calculator',
       'how many lots to trade',
@@ -86,9 +88,11 @@ export const MARKET_CALCULATOR_PAGES: MarketCalculatorPage[] = [
     slug: 'futures',
     market: 'futures',
     title: 'Futures Position Size Calculator',
-    metaTitle: 'Futures Position Size Calculator — Ticks',
+    // Nobody searches "ticks" in the abstract. They search their contract by
+    // its ticker, and the tickers also prove the specs here are real.
+    metaTitle: 'Futures Position Size Calculator — ES, NQ, MES',
     metaDescription:
-      'How many ES, NQ or MES contracts to trade. Enter account, risk percent and stop in ticks, with real CME tick values already filled in.',
+      'How many ES, NQ or MES contracts your account allows. Real CME tick sizes and values are already in, so a point is never mistaken for a dollar.',
     keywords: [
       'futures position size calculator',
       'how many contracts to trade',
@@ -161,9 +165,12 @@ export const MARKET_CALCULATOR_PAGES: MarketCalculatorPage[] = [
     slug: 'crypto',
     market: 'crypto',
     title: 'Crypto Position Size Calculator',
-    metaTitle: 'Crypto Position Size Calculator — Satoshis',
+    // "Satoshis" is precise but narrow, and it spends half the title on a
+    // detail only the already-initiated recognise. It keeps its place in the
+    // description, where it reads as proof rather than as a filter.
+    metaTitle: 'Crypto Position Size Calculator — BTC & Alts',
     metaDescription:
-      'Size a crypto trade to a fixed risk. Handles fractional positions down to satoshi precision, so a real position never rounds away to zero.',
+      'Size a crypto trade to a fixed risk, with enough decimal places to actually place it. Works for bitcoin and altcoins, down to satoshi precision.',
     keywords: [
       'crypto position size calculator',
       'bitcoin position size calculator',

@@ -11,7 +11,12 @@ import { AdSlot } from '@/components/layout/AdSlot';
 import { CATEGORY_MAP } from '@/data/categories';
 import { getAdjacentTerms, getAllSlugs, getRelatedTerms, getTerm } from '@/lib/dictionary';
 import { SITE, absoluteUrl } from '@/lib/site';
-import { buildDescription, buildTitle } from '@/lib/seo';
+import {
+  buildDescription,
+  buildTitle,
+  termDescriptionSuffixes,
+  termTitleSuffixes,
+} from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -27,19 +32,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!term) return { title: 'Term not found' };
 
   const category = CATEGORY_MAP[term.category]?.label ?? 'Trading';
-  // Only promise a formula when the page actually has one, and fall back to a
-  // shorter suffix so long term names do not push the title past the cut-off.
-  const title = buildTitle(
-    term.term,
-    term.formula
-      ? [' — Definition, Formula & Example', ' — Definition & Formula', ' — Definition']
-      : [' — Definition & Example', ' — Definition'],
-  );
-  const description = buildDescription(term.short, [
-    'Definition, formula, worked example and common mistakes.',
-    'Definition, example and the mistakes people make.',
-    'Definition and worked example.',
-  ]);
+
+  /*
+   * "Pip — Definition & Example" is not a thing anyone types into Google.
+   * "pip meaning" is. The meaning-first pattern matches the query people
+   * actually use for a term they don't know, and — unlike "what is a pip" —
+   * it needs no article, which cannot be derived reliably across 135 terms
+   * ("a pip", but "leverage", not "a leverage").
+   *
+   * Only promise a formula when the page has one, and fall back to shorter
+   * suffixes so a long term name does not push the title past the cut-off.
+   */
+  const title = buildTitle(term.term, termTitleSuffixes(Boolean(term.formula)));
+
+  // A description earns the click by promising something specific. "Definition,
+  // formula, worked example and common mistakes" describes a page; a calculator
+  // you can use without leaving the page is a reason to open it.
+  const description = buildDescription(term.short, termDescriptionSuffixes(Boolean(term.widget)));
 
   return {
     title,
