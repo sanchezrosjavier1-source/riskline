@@ -1,3 +1,4 @@
+import { NOINDEX_ROBOTS } from '@/lib/indexing';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -56,6 +57,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical: `/markets/${id}` },
+    // A price and a chart, with no writing of our own. Useful to click into
+    // from /markets; not a page that should rank.
+    robots: NOINDEX_ROBOTS,
     openGraph: {
       title: `${labels.symbol} — ${SITE.name}`,
       description,

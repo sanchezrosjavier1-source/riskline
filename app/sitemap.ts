@@ -2,10 +2,14 @@ import type { MetadataRoute } from 'next';
 import { getAllSlugs } from '@/lib/dictionary';
 import { getAllGuideSlugs } from '@/lib/guides';
 import { getAllHistorySlugs } from '@/lib/history';
-import { allAssetIds } from '@/lib/markets';
 import { getAllMarketCalculatorSlugs } from '@/data/market-calculators';
 import { SITE } from '@/lib/site';
 
+/**
+ * Only pages with original writing of their own belong here. The per-asset
+ * pages under /markets and the /news aggregator are deliberately absent —
+ * see lib/indexing.ts for why, and for the noindex that goes with it.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
@@ -27,7 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/tools`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${SITE.url}/markets`, lastModified: now, changeFrequency: 'hourly', priority: 0.85 },
     { url: `${SITE.url}/journal`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${SITE.url}/news`, lastModified: now, changeFrequency: 'hourly', priority: 0.8 },
     {
       url: `${SITE.url}/trading-dictionary`,
       lastModified: now,
@@ -78,19 +81,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.95,
   }));
 
-  const assetRoutes: MetadataRoute.Sitemap = allAssetIds().map((id) => ({
-    url: `${SITE.url}/markets/${id}`,
-    lastModified: now,
-    changeFrequency: 'daily',
-    priority: 0.7,
-  }));
-
   return [
     ...staticRoutes,
     ...marketCalculatorRoutes,
     ...termRoutes,
     ...guideRoutes,
     ...historyRoutes,
-    ...assetRoutes,
   ];
 }

@@ -1,3 +1,4 @@
+import { NOINDEX_ROBOTS } from '@/lib/indexing';
 import type { Metadata } from 'next';
 import { PAGE_SEO } from '@/data/page-seo';
 import Link from 'next/link';
@@ -14,6 +15,9 @@ export const metadata: Metadata = {
   title: PAGE_SEO.news.title,
   description: PAGE_SEO.news.description,
   alternates: { canonical: '/news' },
+  // Headlines here belong to CNBC and MarketWatch. The page is useful to a
+  // visitor and has no business competing in search on borrowed words.
+  robots: NOINDEX_ROBOTS,
   openGraph: {
     title: `Market News — ${SITE.name}`,
     description: 'The week&rsquo;s market headlines, refreshed automatically.',
