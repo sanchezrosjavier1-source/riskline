@@ -86,7 +86,7 @@ export default function AboutPage() {
                 <Link href="/trading-dictionary" className="link-underline">
                   dictionary
                 </Link>{' '}
-                of {ALL_TERMS.length} terms, written in plain English, with a worked numeric
+                of {ALL_TERMS.length} terms, written in plain English, with a worked
                 example on every entry and a live calculator embedded in many of them.
               </li>
               <li>
