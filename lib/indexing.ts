@@ -1,17 +1,16 @@
 /**
  * Which routes belong in the search index.
  *
- * Not every useful page is a page worth indexing. Two parts of this site exist
- * for someone already here and have no original writing of their own: the
- * per-asset pages under /markets, which are a live price and a chart, and
- * /news, which republishes headlines that belong to CNBC and MarketWatch.
+ * Not every useful page is a page worth indexing. The per-asset pages under
+ * /markets exist for someone already here — a live price and a chart — and
+ * have no original writing of their own.
  *
- * Left in the index they are 19 of 202 URLs with nothing to say, and a
+ * Left in the index they are eighteen URLs with nothing to say, and a
  * reviewer sampling the site lands on one often enough to conclude the whole
  * site is thin. Out of the index they cost nothing: the visitor who wants a
  * BTC chart still clicks through from /markets and gets it.
  *
- * "follow" stays on deliberately. The pages should not rank, but the links
+ * follow stays on deliberately. The pages should not rank, but the links
  * they carry back into the calculators and the dictionary should still count.
  */
 export const NOINDEX_ROBOTS = { index: false, follow: true } as const;
@@ -24,7 +23,7 @@ export const NOINDEX_ROBOTS = { index: false, follow: true } as const;
 const NOINDEX_CHILD_PREFIXES = ['/markets/'];
 
 /** Whole routes excluded, index page included. */
-const NOINDEX_EXACT = ['/news'];
+const NOINDEX_EXACT: string[] = [];
 
 export function isIndexable(path: string): boolean {
   const clean = path.replace(/\/+$/, '') || '/';

@@ -105,13 +105,6 @@ export const PAGE_SEO = {
     keywords: ['free trading journal', 'trading journal no sign up', 'trade log'],
   },
 
-  news: {
-    path: '/news',
-    title: 'Market News — 9 Headlines, Updated Hourly',
-    description:
-      'Nine market headlines from CNBC and MarketWatch, refreshed every hour and linked straight back to the publisher. Nobody curates this page.',
-    keywords: ['market news today', 'stock market headlines', 'financial news'],
-  },
 
   faq: {
     path: '/faq',

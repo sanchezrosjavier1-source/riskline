@@ -218,3 +218,31 @@ describe('navigation', () => {
     expect(letters).toEqual([...letters].sort());
   });
 });
+
+describe('every term is worked through, not just defined', () => {
+  // A definition tells you what a word means. A worked case tells you what the
+  // word does to a decision, and it is the difference between a glossary worth
+  // reading and 135 pages of the same template. The type makes the field
+  // required; these keep it from being satisfied with a token sentence.
+  it.each(ALL_TERMS.map((t) => [t.term, t] as const))('%s carries a real example', (_name, term) => {
+    expect(term.example.setup.length, `${term.slug} setup`).toBeGreaterThan(20);
+    expect(term.example.body.length, `${term.slug} paragraphs`).toBeGreaterThanOrEqual(2);
+
+    const words = term.example.body.join(' ').split(/\s+/).length;
+    expect(words, `${term.slug} example is ${words} words`).toBeGreaterThan(90);
+  });
+
+  it('labels every step it shows, and gives every label a value', () => {
+    for (const term of ALL_TERMS) {
+      for (const step of term.example.steps ?? []) {
+        expect(step.label.trim().length, term.slug).toBeGreaterThan(2);
+        expect(step.value.trim().length, term.slug).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('does not reuse one example across several terms', () => {
+    const setups = ALL_TERMS.map((t) => t.example.setup.toLowerCase());
+    expect(new Set(setups).size).toBe(setups.length);
+  });
+});

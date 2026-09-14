@@ -213,6 +213,38 @@ export default async function TermPage({ params }: PageProps) {
               </section>
             )}
 
+            {/* --------------------------------------------------------- example */}
+            <section aria-labelledby="example">
+              <h2 id="example" className="text-sm font-medium text-ink">
+                Worked through
+              </h2>
+              <div className="mt-3 overflow-hidden rounded-xl border border-line bg-base-sunken/40">
+                <p className="border-b border-line px-5 py-3.5 text-sm font-medium text-ink">
+                  {term.example.setup}
+                </p>
+
+                {term.example.steps && (
+                  <dl className="divide-y divide-line border-b border-line">
+                    {term.example.steps.map((step) => (
+                      <div
+                        key={step.label}
+                        className="flex flex-col gap-1 px-5 py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
+                      >
+                        <dt className="text-xs leading-relaxed text-ink-faint">{step.label}</dt>
+                        <dd className="display-num shrink-0 text-sm text-ink">{step.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+
+                <div className="prose-riskline max-w-[68ch] px-5 py-4">
+                  {term.example.body.map((paragraph) => (
+                    <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+            </section>
+
             {/* ------------------------------------------------------ interactive */}
             {term.widget && (
               <section aria-labelledby="interactive">

@@ -26,12 +26,7 @@ describe('isIndexable', () => {
     expect(isIndexable('/markets/eur-usd')).toBe(false);
   });
 
-  it('drops /news, which republishes headlines it does not own', () => {
-    expect(isIndexable('/news')).toBe(false);
-  });
-
   it('ignores a trailing slash either way', () => {
-    expect(isIndexable('/news/')).toBe(false);
     expect(isIndexable('/markets/')).toBe(true);
     expect(isIndexable('/faq/')).toBe(true);
   });
@@ -50,7 +45,7 @@ describe('robotsFor', () => {
   it('blocks indexing but keeps the links followable', () => {
     // The page should not rank. The links it carries back into the
     // calculators and the dictionary should still count.
-    expect(robotsFor('/news')).toEqual(NOINDEX_ROBOTS);
+    expect(robotsFor('/markets/bitcoin')).toEqual(NOINDEX_ROBOTS);
     expect(NOINDEX_ROBOTS.follow).toBe(true);
   });
 });

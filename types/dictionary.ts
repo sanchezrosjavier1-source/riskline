@@ -55,6 +55,24 @@ export interface Formula {
   legend?: Array<{ symbol: string; meaning: string }>;
 }
 
+/**
+ * One concrete case, worked through.
+ *
+ * The most useful thing a glossary can add, and the thing most of them skip: a
+ * definition tells you what a word means, a worked case tells you what the word
+ * does to a decision. Numbers where the term is quantitative, a real situation
+ * where it is not — the shape follows the subject rather than a template, which
+ * is why `steps` is optional.
+ */
+export interface WorkedExample {
+  /** Sets the scene in one line, e.g. "A 10,000 account risking 1%". */
+  setup: string;
+  /** The reasoning, one string per paragraph. */
+  body: string[];
+  /** Optional labelled arithmetic, rendered as a table. */
+  steps?: Array<{ label: string; value: string }>;
+}
+
 export interface ToolLink {
   label: string;
   href: string;
@@ -73,6 +91,8 @@ export interface Term {
   formula?: Formula;
   widget?: WidgetKind;
   diagram?: DiagramKind;
+  /** A worked case. Required, so no term can ship as a bare definition. */
+  example: WorkedExample;
   whyItMatters: string;
   mistakes: string[];
   /** Slugs of related terms. Validated at build time by lib/dictionary.ts. */

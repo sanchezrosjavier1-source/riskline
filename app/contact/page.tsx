@@ -39,18 +39,57 @@ export default function ContactPage() {
 
         <div className="prose-riskline mt-10 space-y-6">
           <section>
-            <h2 className="text-sm font-medium text-ink">What to include</h2>
+            <h2 className="text-sm font-medium text-ink">Corrections come first</h2>
             <p className="mt-2">
-              For a correction, the page URL and what specifically looks wrong. For a bug, what you
-              were doing when it happened and, if possible, a screenshot.
+              A wrong tick value or a mistyped formula is worse than no tool at all, because it is
+              wrong in a way that looks right. Corrections are handled before anything else on the
+              list, and the page is updated as soon as the error is confirmed.
+            </p>
+            <p>
+              Include the page URL and what specifically looks wrong — ideally the numbers you put
+              in and the number you expected back. That is usually enough to reproduce it in a
+              minute rather than an afternoon.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-medium text-ink">Bugs</h2>
+            <p className="mt-2">
+              Say what you were doing when it happened, which browser you were in, and whether it
+              happens every time or once. A screenshot helps more than a description.
+            </p>
+            <p>
+              One thing worth knowing before you write: the journal stores your trades in your own
+              browser, so clearing site data, switching browsers or opening the site in a private
+              window will show an empty journal. That is the design, not a bug — but if entries
+              vanish without any of those happening, please do report it.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-medium text-ink">Missing terms and requests</h2>
+            <p className="mt-2">
+              If you looked something up and the dictionary did not have it, that is genuinely
+              useful to hear — a gap you hit is worth more than a term chosen from a list. The same
+              goes for a futures contract whose specification is not in the calculator yet.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-medium text-ink">What cannot be answered</h2>
+            <p className="mt-2">
+              Questions about specific trades, positions or markets will not get a reply. Not out
+              of rudeness: {SITE.name} is educational, is not authorised to give financial advice,
+              and an answer to &ldquo;should I take this trade&rdquo; would be exactly that.
+              Questions about how a calculation works are always welcome.
             </p>
           </section>
 
           <section>
             <h2 className="text-sm font-medium text-ink">Response time</h2>
             <p className="mt-2">
-              {SITE.name} is a small, independently run project. Most messages get a reply within a
-              few days, though it can take longer.
+              {SITE.name} is run by one person alongside other work. Most messages get a reply
+              within a few days, and corrections are usually fixed faster than they are answered.
             </p>
           </section>
         </div>
