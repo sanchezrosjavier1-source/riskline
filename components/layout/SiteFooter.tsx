@@ -92,6 +92,7 @@ export function SiteFooter() {
                 </FooterLink>
               ))}
               <FooterLink href="/faq">FAQ</FooterLink>
+              <FooterLink href="/methodology">How the maths works</FooterLink>
             </FooterColumn>
           </div>
         </div>

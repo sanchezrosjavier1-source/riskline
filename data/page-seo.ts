@@ -124,6 +124,16 @@ export const PAGE_SEO = {
     keywords: ['risk management quiz', 'trading quiz', 'trading knowledge test'],
   },
 
+  methodology: {
+    path: '/methodology',
+    // A finance site that shows its working is making a claim a reader can
+    // check, which is worth more than any assurance that it is trustworthy.
+    title: 'How Every Calculation Here Works',
+    description:
+      'Every formula StopSize uses for position size and risk/reward, the real CME contract specs, where the market data comes from, and what it refuses to show.',
+    keywords: ['position size formula', 'trading calculator methodology', 'how position size is calculated'],
+  },
+
   marketHistory: {
     path: '/market-history',
     // Leading with the number wins the eye in a results list, and the year
