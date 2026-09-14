@@ -5,6 +5,7 @@ import { AlertTriangle, ArrowRight, Lightbulb, Sparkles } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Diagram } from '@/components/diagrams/Diagram';
 import { TermWidget } from '@/components/dictionary/TermWidget';
+import { Byline } from '@/components/ui/Byline';
 import { KeepExploring } from '@/components/dictionary/KeepExploring';
 import { RecentTermsTracker } from '@/components/dictionary/RecentTermsTracker';
 import { AdSlot } from '@/components/layout/AdSlot';
@@ -166,6 +167,7 @@ export default async function TermPage({ params }: PageProps) {
                 Also called: {term.aliases.join(' · ')}
               </p>
             )}
+            <Byline />
           </header>
 
           <div className="mt-9 space-y-10">

@@ -12,6 +12,12 @@ export const SITE = {
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://stopsize.com',
   /** Public contact address, shown on /contact and /privacy. Change freely — used in one place. */
   contactEmail: 'triobucks09@gmail.com',
+  /**
+   * The person who writes and maintains the site. Shown as a byline on guides
+   * and dictionary entries and named in structured data, because a finance
+   * page with no identifiable author asks the reader to trust nobody.
+   */
+  author: { name: 'Javier Sánchez Ros' },
   locale: 'en_US',
 } as const;
 

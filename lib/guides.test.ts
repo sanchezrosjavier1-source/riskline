@@ -105,7 +105,16 @@ describe('internal linking', () => {
   });
 
   it('points every tool link at a known route', () => {
-    const routes = new Set(['/calculator', '/tools', '/tools/position-size', '/tools/risk-reward']);
+    const routes = new Set([
+      '/calculator',
+      '/calculator/forex',
+      '/calculator/futures',
+      '/calculator/crypto',
+      '/journal',
+      '/tools',
+      '/tools/position-size',
+      '/tools/risk-reward',
+    ]);
     for (const guide of ALL_GUIDES) {
       for (const tool of guide.tools ?? []) {
         expect(routes.has(tool.href), `${guide.title} links to unknown route ${tool.href}`).toBe(

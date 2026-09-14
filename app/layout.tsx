@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     'trading terms',
     'risk management',
   ],
-  authors: [{ name: SITE.name }],
+  authors: [{ name: SITE.author.name, url: `${SITE.url}/about` }],
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',

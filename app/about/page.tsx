@@ -117,7 +117,9 @@ export default function AboutPage() {
           <section>
             <h2 className="text-sm font-medium text-ink">Who writes this</h2>
             <p className="mt-2">
-              {SITE.name} is built and maintained by one person, independently. There is no
+              {SITE.name} is written, built and maintained by {SITE.author.name}, independently.
+              Every guide, every dictionary entry and every calculator on the site is his work, and
+              corrections come to him directly. There is no
               editorial team, no sponsor and no parent company, and the site sells nothing — no
               course, no signal service, no premium tier, no affiliate links to brokers. That
               matters more than it sounds: a site that earns a commission when you open a brokerage

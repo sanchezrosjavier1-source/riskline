@@ -5,6 +5,9 @@ import { riskManagementFrameworkGuide } from './risk-management-framework';
 import { leverageGuide } from './leverage';
 import { stopLossPlacementGuide } from './stop-loss-placement';
 import { drawdownRecoveryGuide } from './drawdown-recovery';
+import { futuresSizingGuide } from './futures-sizing';
+import { gapRiskGuide } from './gap-risk';
+import { journalReviewGuide } from './journal-review';
 
 /**
  * Deliberately ordered as a reading path rather than alphabetically:
@@ -17,6 +20,9 @@ export const ALL_GUIDES: Guide[] = [
   riskRewardGuide,
   stopLossPlacementGuide,
   riskManagementFrameworkGuide,
+  futuresSizingGuide,
   leverageGuide,
+  gapRiskGuide,
   drawdownRecoveryGuide,
+  journalReviewGuide,
 ];

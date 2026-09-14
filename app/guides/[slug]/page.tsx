@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { Byline } from '@/components/ui/Byline';
 import { Diagram } from '@/components/diagrams/Diagram';
 import { TermWidget } from '@/components/dictionary/TermWidget';
 import { AdSlot } from '@/components/layout/AdSlot';
@@ -40,14 +41,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: { canonical: `/guides/${guide.slug}` },
     openGraph: {
       type: 'article',
-      title: `${guide.title} â€” ${SITE.name}`,
+      title: `${guide.title} — ${SITE.name}`,
       description: guide.dek,
       url: absoluteUrl(`/guides/${guide.slug}`),
       siteName: SITE.name,
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${guide.title} â€” ${SITE.name}`,
+      title: `${guide.title} — ${SITE.name}`,
       description: guide.dek,
     },
   };
@@ -69,7 +70,7 @@ export default async function GuidePage({ params }: PageProps) {
     headline: guide.title,
     description: guide.dek,
     url: absoluteUrl(`/guides/${guide.slug}`),
-    author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    author: { '@type': 'Person', name: SITE.author.name, url: absoluteUrl('/about') },
     publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
     mainEntityOfPage: absoluteUrl(`/guides/${guide.slug}`),
     articleSection: guide.topic,
@@ -110,6 +111,7 @@ export default async function GuidePage({ params }: PageProps) {
             <p className="mt-3 max-w-[62ch] text-pretty text-lg leading-relaxed text-ink-muted">
               {guide.dek}
             </p>
+            <Byline />
           </header>
 
           {/* --------------------------------------------------------- takeaways */}
